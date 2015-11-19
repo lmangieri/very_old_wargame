@@ -197,12 +197,15 @@ public class StateMachine implements Runnable {
 		// faço isso.... até que todos os países lockeds sejam realocados... ou.... eu paro caso não tiver mais targets.
 		
 		
-		
-		// this.setStateGame(2);
+		nextTurn();
+	
+	}
+	
+	public void nextTurn() {
 		this.currentIndex = this.currentIndex + 1;
 		// this.stage2();
 		state2Thread = new Thread(this);
-		state2Thread.start();		
+		state2Thread.start();	
 	}
 	
 	// FIM DE JOGO

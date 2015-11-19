@@ -108,9 +108,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			// TODO : quem deve transitar de um estado para o outro é o stateMachine....
 			this.stateMachine.setStateGame(7);
 		} else if (this.stateMachine.getStateGame() == 7)  {
-			this.stateMachine.setStateGame(2);
-			this.stateMachine.currentIndex = this.stateMachine.currentIndex + 1;
-			this.stateMachine.stage2();
+			this.stateMachine.nextTurn();
 		}
 	}
 
@@ -140,9 +138,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 				playerTransfer();
 				if(cantTransferAnymore()) {
 					// TODO : todas essas mudanças de estado devem ser feitas pela StateMachine
-					this.stateMachine.setStateGame(2);
-					this.stateMachine.currentIndex = this.stateMachine.currentIndex + 1;
-					this.stateMachine.stage2();
+					this.stateMachine.nextTurn();
 				}
 			}
 		}

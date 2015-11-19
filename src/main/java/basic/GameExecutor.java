@@ -44,7 +44,7 @@ public class GameExecutor {
 		availableColors.add(ColorEnum.YELLOW);
 
 		// players.add(new Player(availableColors.get(0), true));
-		players.add(new Player(availableColors.get(0), false));
+		players.add(new Player(availableColors.get(0), true));
 		players.add(new Player(availableColors.get(1), false));
 		players.add(new Player(availableColors.get(2), false));
 		players.add(new Player(availableColors.get(3), false));
