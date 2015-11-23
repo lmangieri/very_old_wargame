@@ -221,6 +221,7 @@ public class StateMachine implements Runnable {
 			if(this.currentPlayer.getNodes().size() > 23) {
 				System.out.println("conquer 24 countries....");
 				System.out.println("the game has ended");
+				this.setStateGame(8);
 				return true;
 			}
 		} else if(this.currentPlayer.getObjetive().getClass().equals(PutTwoPiecesOnEighteenCountriesObjetive.class)) {
@@ -246,6 +247,7 @@ public class StateMachine implements Runnable {
 				}
 			}
 			System.out.println("the game has ended");
+			this.setStateGame(8);
 			return true;
 		
 		} else if(this.currentPlayer.getObjetive().getTargets().isEmpty()) {

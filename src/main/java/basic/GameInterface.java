@@ -320,7 +320,8 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 							this.stateMachine.nodeTarget = null;
 						}
 					}
-				} else {
+				} else if((!n.getPlayer().getColorEnum()
+						.equals(this.stateMachine.currentPlayer.getColorEnum()))) {
 					this.stateMachine.nodeTarget = n;
 					boolean flag = false;
 					if (this.stateMachine.nodeAttacker != null) {
