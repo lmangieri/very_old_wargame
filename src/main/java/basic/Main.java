@@ -33,8 +33,8 @@ public class Main {
 				frame.setSize(1200, 965);
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
-				gameInterface.initAnimation();
-				gameInterface.initGame();
+				// gameInterface.initAnimation();
+				// gameInterface.initGame();
 				//GraphAlgorithm gr = new GraphAlgorithm(gameInterface.graph); 
 				//System.out.println("min distance brasil japao => " +gr.minDistance("Brasil", "Sibéria"));
 			}

@@ -18,6 +18,8 @@ public class StateMachine implements Runnable {
 	public StrategiesAlgorithm strategiesAlgorithm;
 	private Thread state2Thread;
 	
+	public int velocityChoosed;
+	
 	public Player currentPlayer;
 	public int currentIndex;
 
@@ -139,7 +141,7 @@ public class StateMachine implements Runnable {
 					// System.out.println("target => " + nodeTarget.getName());
 	
 					try {
-						Thread.sleep(10);
+						Thread.sleep(velocityChoosed);
 					} catch (InterruptedException e) {
 					}
 					this.gameExecutor.attack(this.nodeAttacker, this.nodeTarget);   // ?????

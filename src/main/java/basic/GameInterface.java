@@ -1,5 +1,7 @@
 package basic;
 
+import java.awt.Checkbox;
+import java.awt.CheckboxGroup;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -7,25 +9,25 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
-import java.util.List;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.Timer;
 
-import objetives.ConquerTwentyFourCountriesObjetive;
-import objetives.PutTwoPiecesOnEighteenCountriesObjetive;
-import entities.Continent;
+import utils.CheckboxGroupList;
+import algorithm.MathAlgorithm;
+import algorithm.StrategiesAlgorithm;
+import auxiliaryEntities.AuxPutOrRelocatePiece;
+import auxiliaryEntities.StructureAuxToPutPiecesOnContinent;
 import entities.Graph;
 import entities.Node;
 import entities.Player;
 import entities.Vertice;
-import algorithm.MathAlgorithm;
-import algorithm.StrategiesAlgorithm;
-import auxiliaryEntities.AuxPutOrRelocatePiece;
-import auxiliaryEntities.DadosJogados;
-import auxiliaryEntities.StructureAuxToPutPiecesOnContinent;
+import enums.ColorEnum;
 
 public class GameInterface extends JPanel implements ActionListener, Runnable {
 
@@ -35,15 +37,25 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	private static final long serialVersionUID = 1L;
 	private GameExecutor gameExecutor;
 
+	private JButton startButton;
+	private CheckboxGroupList grpColorsSelect;
+	private CheckboxGroupList grpTotalPlayers;
+	private CheckboxGroupList grpVelocityGame;
+	
+	private String colorChoosed;
+	private int velocityChoosed;;
+	private int numberOfPlayersChoosed;
+	
 	private Thread animator;
 	private Timer time;
-	
+
 	private StateMachine stateMachine;
 
 	// SHOULD IT BE HERE? 
 	public StrategiesAlgorithm strategiesAlgorithm;
 
 	/* Inicio: Conjunto de imagens utilizadas para a interface gráfica */
+	public Image initialScreen;
 	public Image imgBoard;
 	public Image imgFooter;
 	public Image imgAttacker;
@@ -69,7 +81,10 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		ImageIcon icon = new ImageIcon(getClass().getResource(
 				"/images/paintedCropped.png"));
 		this.imgBoard = icon.getImage();
-
+		
+		icon = new ImageIcon(getClass().getResource("/images/initialScreen.png"));
+		this.initialScreen = icon.getImage();
+		
 		icon = new ImageIcon(getClass().getResource("/images/footer.png"));
 		this.imgFooter = icon.getImage();
 
@@ -84,8 +99,63 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		icon = new ImageIcon(getClass().getResource(
 				"/images/circuloazul.png"));
 		this.imgBlueCircle = icon.getImage();
+		
+		this.startButton = new JButton("Jogar");
+		this.add(this.startButton);
+		
+		this.startButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startButtonPerformed(evt);
+            }
+        });
+		
+		
+		// String colors[] = {"Azul", "Vermelho", "Preto","Branco","Amarelo","Verde"};
+		// this.boxes = new JCheckBox[colors.length];
+		
+
+		// this.boxes//JCheckBox(colors,6);
+		// this.boxes = new JCheckBox();
+		// this.boxes.setText("z");
+		// this.add(boxes);
+		
+		initButtons();
+		this.stateMachine.setStateGame(0);
 	}
 	
+
+	protected void startButtonPerformed(ActionEvent evt) {
+		this.numberOfPlayersChoosed = Integer.valueOf(this.grpTotalPlayers.getSelectedCheckbox().getLabel());
+		
+		this.colorChoosed = this.grpColorsSelect.getSelectedCheckbox().getLabel();
+		
+		String v = this.grpVelocityGame.getSelectedCheckbox().getLabel();
+		if(v.equals("Lento")) {
+			this.stateMachine.velocityChoosed = 800;
+		} else if(v.equals("Normal")) {
+			this.stateMachine.velocityChoosed = 500;
+		} else if(v.equals("Rápido")) {
+			this.stateMachine.velocityChoosed = 100;
+		} else {
+			this.stateMachine.velocityChoosed = 0;
+		}
+		this.startButton.setVisible(false);
+		for(Checkbox checkbox : this.grpColorsSelect.list) {
+			checkbox.setVisible(false);
+		}
+		for(Checkbox checkbox : this.grpTotalPlayers.list) {
+			checkbox.setVisible(false);
+		}
+		for(Checkbox checkbox : this.grpVelocityGame.list) {
+			checkbox.setVisible(false);
+		}		
+		
+		gameExecutor.initPlayers(colorChoosed, numberOfPlayersChoosed);
+		initAnimation();
+		initGame();
+		
+	}
+
 
 	public void initGame() {
 		this.stateMachine.initGameStateOne();
@@ -302,52 +372,96 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	}
 
 	public void paint(Graphics g) {
-
 		Graphics2D g2d = (Graphics2D) g;
 
-		g2d.drawImage(imgBoard, 0, 0, null);
-		g2d.drawImage(imgFooter, 0, 790, null);
+		if(this.stateMachine.getStateGame() == 0) {
+			g2d.drawImage(this.initialScreen,0,0,null);
 
-		/* Desenhando circulos com seus respectivos exércitos */
-		for (Player p : gameExecutor.getPlayers()) {
-			for (Node n : p.getNodes()) {
-				drawCircle(g2d, n.x, n.y, p.getColorEnum().getColor(), 25, true);
+
+			
+			int i = 0;
+			for(Checkbox checkbox : this.grpColorsSelect.list) {
+				checkbox.setBackground(Color.WHITE);
+				checkbox.setBounds(440 + i*80, 440, 70, 30);
+				i = i + 1;
 			}
-		}
-		for (Node n : this.gameExecutor.getGraph().getNodes()) {
-			if(n.getPlayer().getColorEnum().getColor().equals(Color.BLACK)) {
-				g2d.setColor(Color.WHITE);
-			} else {
-				g2d.setColor(Color.BLACK);
+
+			i = 0;
+			for(Checkbox checkbox : this.grpTotalPlayers.list) {
+				checkbox.setBackground(Color.WHITE);
+				checkbox.setBounds(440 + i*110, 550, 100, 30);
+				i = i + 1;
 			}
 			
-			g2d.drawString(Integer.toString(n.getNumberOfPieces()), n.x + 10,
-					n.y + 15);
-		}
+			i = 0;
+			for(Checkbox checkbox : this.grpVelocityGame.list) {
+				checkbox.setBackground(Color.WHITE);
+				checkbox.setBounds(440 + i*110, 660, 100,30);
+				i = i + 1;
+			}
+			
+			// this.startButton.setOpaque(true);
+			// this.startButton.setVisible(true);
+			this.startButton.setBounds(320, 750, 80, 40);
+			//this.startButton.
 
-		/* Desenhando círculos dos steps */
-		drawStepCircles(g2d);
+			/*
+			while(selectedColorGroup.getElements().nextElement()) {
+				
+			}
+			this.boxes[0].setVisible(true);
+			this.boxes[0].setLocation(300, 500);
+			
+			this.boxes[1].setVisible(true);
+			this.boxes[1].setLocation(300, 510);		
+			*/
+			
+		} else {
+			g2d.drawImage(imgBoard, 0, 0, null);
+			g2d.drawImage(imgFooter, 0, 790, null);
+	
+			/* Desenhando circulos com seus respectivos exércitos */
+			for (Player p : gameExecutor.getPlayers()) {
+				for (Node n : p.getNodes()) {
+					drawCircle(g2d, n.x, n.y, p.getColorEnum().getColor(), 25, true);
+				}
+			}
+			for (Node n : this.gameExecutor.getGraph().getNodes()) {
+				if(n.getPlayer().getColorEnum().getColor().equals(Color.BLACK)) {
+					g2d.setColor(Color.WHITE);
+				} else {
+					g2d.setColor(Color.BLACK);
+				}
+				
+				g2d.drawString(Integer.toString(n.getNumberOfPieces()), n.x + 10,
+						n.y + 15);
+			}
+	
+			/* Desenhando círculos dos steps */
+			drawStepCircles(g2d);
+	
+			if (this.stateMachine.getStateGame() == 3 || this.stateMachine.getStateGame() == 4) {
+				if (this.stateMachine.nodeAttacker != null) {
+					g2d.drawImage(imgAttacker, this.stateMachine.nodeAttacker.x + 25,
+							this.stateMachine.nodeAttacker.y, null);
+				}
+				if (this.stateMachine.nodeTarget != null) {
+					g2d.drawImage(imgDefender, this.stateMachine.nodeTarget.x + 25,
+							this.stateMachine.nodeTarget.y, null);
+				}
+			}
+			
+			if(this.stateMachine.getStateGame() == 7) {
+				if(this.stateMachine.nodeToTransferOrigin != null) {
+					g2d.drawImage(imgBlueCircle, this.stateMachine.nodeToTransferOrigin.x + 25,
+							this.stateMachine.nodeToTransferOrigin.y,null);
+				}
+			}
 
-		if (this.stateMachine.getStateGame() == 3 || this.stateMachine.getStateGame() == 4) {
-			if (this.stateMachine.nodeAttacker != null) {
-				g2d.drawImage(imgAttacker, this.stateMachine.nodeAttacker.x + 25,
-						this.stateMachine.nodeAttacker.y, null);
-			}
-			if (this.stateMachine.nodeTarget != null) {
-				g2d.drawImage(imgDefender, this.stateMachine.nodeTarget.x + 25,
-						this.stateMachine.nodeTarget.y, null);
-			}
-		}
-		
-		if(this.stateMachine.getStateGame() == 7) {
-			if(this.stateMachine.nodeToTransferOrigin != null) {
-				g2d.drawImage(imgBlueCircle, this.stateMachine.nodeToTransferOrigin.x + 25,
-						this.stateMachine.nodeToTransferOrigin.y,null);
-			}
 		}
 		setOpaque(false);
 		super.paint(g2d);
-		setOpaque(true);
+		setOpaque(false);
 	}
 
 	public void drawStepCircles(Graphics g) {
@@ -427,6 +541,65 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		paint(this.getGraphics());
+	}
+	
+	public void initButtons() {
+		// colors 
+		this.grpColorsSelect = new CheckboxGroupList();
+		
+		Checkbox c1 = new Checkbox(ColorEnum.BLUE.getName(),grpColorsSelect,true);
+		Checkbox c2 = new Checkbox(ColorEnum.RED.getName(),grpColorsSelect,false);
+		Checkbox c3 = new Checkbox(ColorEnum.WHITE.getName(),grpColorsSelect,false);
+		Checkbox c4 = new Checkbox(ColorEnum.BLACK.getName(),grpColorsSelect,false);
+		Checkbox c5 = new Checkbox(ColorEnum.YELLOW.getName(),grpColorsSelect,false);
+		Checkbox c6 = new Checkbox(ColorEnum.GREEN.getName(),grpColorsSelect,false);
+	
+		add(c1);
+		add(c2);
+		add(c3);
+		add(c4);
+		add(c5);
+		add(c6);
+		
+		this.grpColorsSelect.list.add(c1);
+		this.grpColorsSelect.list.add(c2);
+		this.grpColorsSelect.list.add(c3);
+		this.grpColorsSelect.list.add(c4);
+		this.grpColorsSelect.list.add(c5);
+		this.grpColorsSelect.list.add(c6);
+		
+		// players...
+		this.grpTotalPlayers = new CheckboxGroupList();
+		Checkbox c7 = new Checkbox("3",grpTotalPlayers,true);
+		Checkbox c8 = new Checkbox("4",grpTotalPlayers,false);
+		Checkbox c9 = new Checkbox("5",grpTotalPlayers,false);
+		Checkbox c10 = new Checkbox("6",grpTotalPlayers,false);
+		
+		add(c7);
+		add(c8);
+		add(c9);
+		add(c10);
+		
+		this.grpTotalPlayers.list.add(c7);
+		this.grpTotalPlayers.list.add(c8);
+		this.grpTotalPlayers.list.add(c9);
+		this.grpTotalPlayers.list.add(c10);
+		
+		// velocity
+		this.grpVelocityGame = new CheckboxGroupList();
+		Checkbox c11 = new Checkbox("Lento",grpVelocityGame,true);
+		Checkbox c12 = new Checkbox("Normal",grpVelocityGame,false);
+		Checkbox c13 = new Checkbox("Rápido",grpVelocityGame,false);
+		Checkbox c14 = new Checkbox("Muito Rápido",grpVelocityGame,false);
+		
+		add(c11);
+		add(c12);
+		add(c13);
+		add(c14);
+		this.grpVelocityGame.list.add(c11);
+		this.grpVelocityGame.list.add(c12);
+		this.grpVelocityGame.list.add(c13);
+		this.grpVelocityGame.list.add(c14);
 	}
 
 }

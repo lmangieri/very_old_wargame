@@ -2,6 +2,7 @@ package basic;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import objetives.ConquerTwentyFourCountriesObjetive;
@@ -20,7 +21,6 @@ import exceptions.PlayerWithColorNotExist;
 
 public class GameExecutor {
 
-	private int totalPlayers;
 	private Graph graph;
 	private ObjetiveInitializer objetiveInitializer;
 	private StrategiesAlgorithm strategiesAlgorithm; // TODO: this probably will
@@ -31,30 +31,7 @@ public class GameExecutor {
 	public GameExecutor(Graph graph) {
 		this.graph = graph;
 		this.strategiesAlgorithm = new StrategiesAlgorithm(graph);
-		this.totalPlayers = 6;
-
 		players = new ArrayList<>();
-
-		List<ColorEnum> availableColors = new ArrayList<>();
-		availableColors.add(ColorEnum.BLUE);
-		availableColors.add(ColorEnum.RED);
-		availableColors.add(ColorEnum.WHITE);
-		availableColors.add(ColorEnum.BLACK);
-		availableColors.add(ColorEnum.GREEN);
-		availableColors.add(ColorEnum.YELLOW);
-
-		// players.add(new Player(availableColors.get(0), true));
-		players.add(new Player(availableColors.get(0), true));
-		players.add(new Player(availableColors.get(1), false));
-		players.add(new Player(availableColors.get(2), false));
-		players.add(new Player(availableColors.get(3), false));
-		players.add(new Player(availableColors.get(4), false));
-		players.add(new Player(availableColors.get(5), false));
-
-		sortNodesForPlayers();
-		this.objetiveInitializer = new ObjetiveInitializer(this);
-		giveObjectives();
-		putPiecesForAll();
 	}
 
 	private void giveObjectives() {
@@ -63,6 +40,48 @@ public class GameExecutor {
 			System.out.println("Player " + p.getColorEnum() + ", objetive == "
 					+ p.getObjetive().toString());
 		}
+	}
+	
+	public void initPlayers(String colorChoosed, int numberOfPlayersChoosed) {
+		List<ColorEnum> availableColors = new ArrayList<>();
+		availableColors.add(ColorEnum.BLUE);
+		availableColors.add(ColorEnum.RED);
+		availableColors.add(ColorEnum.WHITE);
+		availableColors.add(ColorEnum.BLACK);
+		availableColors.add(ColorEnum.GREEN);
+		availableColors.add(ColorEnum.YELLOW);
+		
+		// players.add(new Player(availableColors.get(0), true));
+		players.add(new Player(availableColors.get(0), false));
+		players.add(new Player(availableColors.get(1), false));
+		players.add(new Player(availableColors.get(2), false));
+		players.add(new Player(availableColors.get(3), false));
+		players.add(new Player(availableColors.get(4), false));
+		players.add(new Player(availableColors.get(5), false));
+		
+		for(Player p : players) {
+			if(p.getColorEnum().getName().equals(colorChoosed)) {
+				p.setIsPlayer(true);
+			}
+		}
+		
+		int currentQtdPlayers = 6;
+		int toBeRemoved = currentQtdPlayers - numberOfPlayersChoosed;
+		while(toBeRemoved > 0) {
+			Player p = players.get(MathAlgorithm.getRandomInt(currentQtdPlayers));
+			if(!p.isPlayer()) {
+				players.remove(p);
+				toBeRemoved = toBeRemoved - 1;
+				currentQtdPlayers = currentQtdPlayers - 1;
+			}
+		}
+
+		Collections.shuffle(players);
+		
+		sortNodesForPlayers();
+		this.objetiveInitializer = new ObjetiveInitializer(this);
+		giveObjectives();
+		putPiecesForAll();
 	}
 
 	/* embaralha os jogadores... e eles colocam as peças... */
@@ -123,11 +142,10 @@ public class GameExecutor {
 	}
 
 	public int getTotalPlayers() {
-		return totalPlayers;
+		return this.players.size();
 	}
 
 	public void setTotalPlayers(int totalPlayers) {
-		this.totalPlayers = totalPlayers;
 	}
 
 	public Graph getGraph() {
