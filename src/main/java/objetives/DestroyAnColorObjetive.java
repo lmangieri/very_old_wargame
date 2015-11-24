@@ -1,6 +1,7 @@
 package objetives;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.util.List;
 
 import entities.Node;
@@ -11,6 +12,7 @@ public class DestroyAnColorObjetive implements Objetive {
 	private Player p;
 	private int identifier;
 	private ColorEnum color;
+	private Image imageObjetive;
 	
 	@Override
 	public int getIdentifier() {
@@ -45,5 +47,16 @@ public class DestroyAnColorObjetive implements Objetive {
 	@Override
 	public String toString() {
 		return "Destruir os exércitos "+p.getColorEnum();
+	}
+
+	@Override
+	public void setImageObjetive(Image image) {
+		this.imageObjetive = image;
+		
+	}
+
+	@Override
+	public Image getImageObjetive() {
+		return this.imageObjetive;
 	}
 }

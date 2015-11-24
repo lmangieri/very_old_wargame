@@ -1,5 +1,6 @@
 package objetives;
 
+import java.awt.Image;
 import java.util.List;
 
 import basic.GameExecutor;
@@ -11,6 +12,7 @@ public class PutTwoPiecesOnEighteenCountriesObjetive implements Objetive {
 	private Player p;
 	private int identifier;	
 	GameExecutor gameExecutor;
+	private Image imageObjetive;
 	
 	public PutTwoPiecesOnEighteenCountriesObjetive(int identifier,GameExecutor gameExecutor) {
 		this.identifier = identifier;
@@ -35,5 +37,15 @@ public class PutTwoPiecesOnEighteenCountriesObjetive implements Objetive {
 	@Override
 	public String toString() {
 		return "Colocar pelo menos 2 exércitos em 18 territórios";
+	}
+
+	@Override
+	public void setImageObjetive(Image image) {
+		this.imageObjetive = image;
+	}
+
+	@Override
+	public Image getImageObjetive() {
+		return this.imageObjetive;
 	}
 }

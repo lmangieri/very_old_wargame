@@ -43,7 +43,6 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	private CheckboxGroupList grpVelocityGame;
 	
 	private String colorChoosed;
-	private int velocityChoosed;;
 	private int numberOfPlayersChoosed;
 	
 	private Thread animator;
@@ -61,6 +60,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	public Image imgAttacker;
 	public Image imgDefender;
 	public Image imgBlueCircle;
+	public Image imgPlayerObjetive;
 
 	public GameInterface() {
 		Graph graph = Graph.getGraphWithDefaultConfiguration();
@@ -131,7 +131,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		
 		String v = this.grpVelocityGame.getSelectedCheckbox().getLabel();
 		if(v.equals("Lento")) {
-			this.stateMachine.velocityChoosed = 800;
+			this.stateMachine.velocityChoosed = 1200;
 		} else if(v.equals("Normal")) {
 			this.stateMachine.velocityChoosed = 500;
 		} else if(v.equals("Rápido")) {
@@ -151,6 +151,9 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		}		
 		
 		gameExecutor.initPlayers(colorChoosed, numberOfPlayersChoosed);
+		
+		this.imgPlayerObjetive = this.gameExecutor.getImageObjetiveFromHumanPlayer();
+		
 		initAnimation();
 		initGame();
 		
@@ -172,6 +175,11 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 
 	// OK
 	private void jumpStepButtonClicked(java.awt.event.MouseEvent evt) {
+		this.stateMachine.nodeAttacker = null;
+		this.stateMachine.nodeTarget = null;
+		this.stateMachine.nodeToTransferDestiny = null;
+		this.stateMachine.nodeToTransferOrigin = null;
+		
 		if (this.stateMachine.getStateGame() == 3) {
 			this.stateMachine.listOfAuxPutOrRelocatePiece = AuxPutOrRelocatePiece.getStructureToRelocatePieces(this.stateMachine.currentPlayer);
 			
@@ -233,7 +241,9 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 				this.stateMachine.nodeToTransferOrigin.addNumberOfPieces(-1);
 				this.stateMachine.nodeToTransferDestiny.addNumberOfPieces(1);
 
-				this.stateMachine.nodeToTransferOrigin = null;
+				if(aux.getPiecesThatCanBeRelocated() == 0) {
+					this.stateMachine.nodeToTransferOrigin = null;
+				}
 				this.stateMachine.nodeToTransferDestiny = null;
 				
 				break;
@@ -458,6 +468,13 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 							this.stateMachine.nodeToTransferOrigin.y,null);
 				}
 			}
+			
+			/* Desenhando flecha de guerra*/
+			Node tempNa = this.stateMachine.nodeAttacker;
+			Node tempNt = this.stateMachine.nodeTarget;
+			if(tempNa != null && tempNt != null){
+				drawArrow(g2d, tempNa.x, tempNa.y, tempNt.x, tempNt.y);
+			}
 
 		}
 		setOpaque(false);
@@ -510,10 +527,11 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	}
 
 	void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {
-		int ARR_SIZE = 4;
+		int ARR_SIZE = 20;
 
 		Graphics2D g = (Graphics2D) g1.create();
 
+		g.setColor(this.stateMachine.currentPlayer.getColorEnum().getColor());
 		double dx = x2 - x1, dy = y2 - y1;
 		double angle = Math.atan2(dy, dx);
 		int len = (int) Math.sqrt(dx * dx + dy * dy);

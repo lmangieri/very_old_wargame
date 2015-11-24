@@ -1,5 +1,6 @@
 package objetives;
 
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class ConquerContinentsObjetive implements Objetive {
 	private List<Continent> targetContinents;
 	private boolean isThereAnAleatoryContinent;
 	private int identifier;
+	private Image imageObjetive;
 	
 	@Override
 	public int getIdentifier() {
@@ -61,6 +63,16 @@ public class ConquerContinentsObjetive implements Objetive {
 
 	public void setThereAnAleatoryContinent(boolean isThereAnAleatoryContinent) {
 		this.isThereAnAleatoryContinent = isThereAnAleatoryContinent;
+	}
+
+	@Override
+	public void setImageObjetive(Image image) {
+		this.imageObjetive = image;
+	}
+
+	@Override
+	public Image getImageObjetive() {
+		return this.imageObjetive;
 	}
 
 

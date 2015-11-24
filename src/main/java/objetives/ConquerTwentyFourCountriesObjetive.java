@@ -1,5 +1,6 @@
 package objetives;
 
+import java.awt.Image;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import entities.Node;
 public class ConquerTwentyFourCountriesObjetive implements Objetive {
 	private int identifier;
 	GameExecutor gameExecutor;
+	private Image imageObjetive;
 	
 	public ConquerTwentyFourCountriesObjetive(int identifier,GameExecutor gameExecutor) {
 		this.identifier = identifier;
@@ -35,5 +37,15 @@ public class ConquerTwentyFourCountriesObjetive implements Objetive {
 	@Override
 	public String toString() {
 		return "Conquistar 24 territórios";
+	}
+
+	@Override
+	public void setImageObjetive(Image image) {
+		this.imageObjetive = image;
+	}
+
+	@Override
+	public Image getImageObjetive() {
+		return this.imageObjetive;
 	}
 }

@@ -1,5 +1,6 @@
 package objetives;
 
+import java.awt.Image;
 import java.util.List;
 
 import entities.Node;
@@ -8,6 +9,9 @@ public interface Objetive {
 	public List<Node> getTargets();
 	public void setIdentifier(int identifier);
 	public int getIdentifier();
+	
+	public void setImageObjetive(Image image);
+	public Image getImageObjetive();
 	
 	
 	// existem 4 tipos de objetivos... 
