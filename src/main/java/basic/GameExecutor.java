@@ -242,8 +242,6 @@ public class GameExecutor {
 				}
 			}
 		}
-		nodeAttacker = null;
-		nodeTarget = null;
 		
 	}
 	

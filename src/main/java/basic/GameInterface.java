@@ -5,6 +5,7 @@ import java.awt.CheckboxGroup;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,7 +46,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	private String colorChoosed;
 	private int numberOfPlayersChoosed;
 	
-	private Thread animator;
+	private Thread game;
 	private Timer time;
 
 	private StateMachine stateMachine;
@@ -61,11 +62,18 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	public Image imgDefender;
 	public Image imgBlueCircle;
 	public Image imgPlayerObjetive;
+	
+	public Image imgEstadoAtacar;
+	public Image imgEstadoColocarPecas;
+	public Image imgEstadoColocarPecasContinente;
+	public Image imgEstadoRemanejamento;
+	public Image imgEstadoTurnoComputador;
 
 	public GameInterface() {
 		Graph graph = Graph.getGraphWithDefaultConfiguration();
 		gameExecutor = new GameExecutor(graph);
 		this.stateMachine = new StateMachine(gameExecutor);
+		this.setLayout(null);  
 		
 		// sei lá se isso deveria estar aqui.... ZZZ
 		this.strategiesAlgorithm = new StrategiesAlgorithm(this.gameExecutor.getGraph());
@@ -100,6 +108,12 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 				"/images/circuloazul.png"));
 		this.imgBlueCircle = icon.getImage();
 		
+		this.imgEstadoAtacar = new ImageIcon(getClass().getResource("/images/estadoAtacar.png")).getImage();
+		this.imgEstadoColocarPecas = new ImageIcon(getClass().getResource("/images/estadoColocarPecas.png")).getImage();
+		this.imgEstadoColocarPecasContinente = new ImageIcon(getClass().getResource("/images/estadoColocarPecasContinente.png")).getImage();
+		this.imgEstadoRemanejamento = new ImageIcon(getClass().getResource("/images/estadoRemanejamento.png")).getImage();
+		this.imgEstadoTurnoComputador = new ImageIcon(getClass().getResource("/images/estadoTurnoComputador.png")).getImage();
+		
 		this.startButton = new JButton("Jogar");
 		this.add(this.startButton);
 		
@@ -108,16 +122,6 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
                 startButtonPerformed(evt);
             }
         });
-		
-		
-		// String colors[] = {"Azul", "Vermelho", "Preto","Branco","Amarelo","Verde"};
-		// this.boxes = new JCheckBox[colors.length];
-		
-
-		// this.boxes//JCheckBox(colors,6);
-		// this.boxes = new JCheckBox();
-		// this.boxes.setText("z");
-		// this.add(boxes);
 		
 		initButtons();
 		this.stateMachine.setStateGame(0);
@@ -154,8 +158,13 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		
 		this.imgPlayerObjetive = this.gameExecutor.getImageObjetiveFromHumanPlayer();
 		
-		initAnimation();
-		initGame();
+		// initAnimation();
+		// initGame();
+		time = new Timer(300, this);
+		time.start();		
+		
+		this.game = new Thread(this);
+		game.start();		
 		
 	}
 
@@ -169,8 +178,8 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		// time = new Timer(1000, this);
 		// time.start();
 
-		animator = new Thread(this);
-		animator.start();
+		// animator = new Thread(this);
+		// animator.start();
 	}
 
 	// OK
@@ -195,7 +204,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	private void MouseClicked(java.awt.event.MouseEvent evt) {
 		int x = evt.getPoint().x;
 		int y = evt.getPoint().y;
-		if (x > 1004 && y > 795) {
+		if (x > 900 && y > 795) {
 			jumpStepButtonClicked(evt);
 
 		} else if (this.stateMachine.getStateGame() == 3) {
@@ -203,6 +212,10 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			if (this.stateMachine.nodeAttacker != null && this.stateMachine.nodeTarget != null) {
 				// should it be like it ? 
 				this.gameExecutor.attack(this.stateMachine.nodeAttacker, this.stateMachine.nodeTarget);
+				if(this.stateMachine.nodeAttacker.getNumberOfPieces() <= 1) {
+					this.stateMachine.nodeAttacker = null;
+					this.stateMachine.nodeTarget = null;
+				}
 				this.stateMachine.theGameHasEnded();
 			} else {
 			}
@@ -388,8 +401,6 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		if(this.stateMachine.getStateGame() == 0) {
 			g2d.drawImage(this.initialScreen,0,0,null);
 
-
-			
 			int i = 0;
 			for(Checkbox checkbox : this.grpColorsSelect.list) {
 				checkbox.setBackground(Color.WHITE);
@@ -411,25 +422,14 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 				i = i + 1;
 			}
 			
-			// this.startButton.setOpaque(true);
-			// this.startButton.setVisible(true);
 			this.startButton.setBounds(320, 750, 80, 40);
-			//this.startButton.
-
-			/*
-			while(selectedColorGroup.getElements().nextElement()) {
-				
-			}
-			this.boxes[0].setVisible(true);
-			this.boxes[0].setLocation(300, 500);
-			
-			this.boxes[1].setVisible(true);
-			this.boxes[1].setLocation(300, 510);		
-			*/
 			
 		} else {
 			g2d.drawImage(imgBoard, 0, 0, null);
 			g2d.drawImage(imgFooter, 0, 790, null);
+			g2d.drawImage(imgPlayerObjetive, 0, 790, null);
+			
+
 	
 			/* Desenhando circulos com seus respectivos exércitos */
 			for (Player p : gameExecutor.getPlayers()) {
@@ -478,40 +478,26 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 
 		}
 		setOpaque(false);
-		super.paint(g2d);
+		super.paint(g);
 		setOpaque(false);
 	}
 
 	public void drawStepCircles(Graphics g) {
 		// será pintado com a Color.MAGENTA apenas o current state do
 		// current player.
+		Graphics2D g2d = (Graphics2D) g;
 		int stateGame = this.stateMachine.getStateGame();
 		
-		if(stateGame == 1 || stateGame == 2 || stateGame == 5) {
-			drawCircle(g, 90, 790, Color.MAGENTA, 30, true);
+		if(stateGame == 3) {
+			g2d.drawImage(imgEstadoAtacar,300,790,null);
+		} else if(stateGame == 5) {
+			g2d.drawImage(imgEstadoColocarPecas,300,790,null);
+		} else if(stateGame == 6) {
+			g2d.drawImage(imgEstadoColocarPecasContinente,300,790,null);
+		} else if(stateGame == 7) {
+			g2d.drawImage(imgEstadoRemanejamento,300,790,null);
 		} else {
-			drawCircle(g, 90, 790, Color.BLUE, 30, true);
-		}
-		
-		
-		if(stateGame == 6) { 
-			drawCircle(g, 290, 790, Color.MAGENTA, 30, true);
-		} else {
-			drawCircle(g, 290, 790, Color.BLUE, 30, true);
-		}
-		
-		drawCircle(g, 490, 790, Color.BLUE, 30, true);
-		
-		if(stateGame == 3 || stateGame == 4) { 
-			drawCircle(g, 690, 790, Color.MAGENTA, 30, true);
-		} else {
-			drawCircle(g, 690, 790, Color.BLUE, 30, true);
-		}
-		
-		if(stateGame == 7) {
-			drawCircle(g, 890, 790, Color.MAGENTA, 30, true);
-		} else {
-			drawCircle(g, 890, 790, Color.BLUE, 30, true);
+			g2d.drawImage(imgEstadoTurnoComputador,300,790,null);
 		}
 		
 	}
@@ -545,7 +531,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	}
 
 	@Override
-	public void run() {
+	public void run() { /*
 		while (true) {
 			try {
 				Thread.sleep(300);
@@ -554,12 +540,15 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			}
 			this.update(this.getGraphics());
 			repaint();
-		}
+		} */
+		initGame();
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		paint(this.getGraphics());
+		System.out.println("action performed");
+		repaint();
 	}
 	
 	public void initButtons() {
