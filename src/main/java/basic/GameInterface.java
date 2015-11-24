@@ -173,28 +173,24 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		this.stateMachine.initGameStateOne();
 	}	
  
-	// OK
-	public void initAnimation() {
-		// time = new Timer(1000, this);
-		// time.start();
-
-		// animator = new Thread(this);
-		// animator.start();
-	}
 
 	// OK
 	private void jumpStepButtonClicked(java.awt.event.MouseEvent evt) {
-		this.stateMachine.nodeAttacker = null;
-		this.stateMachine.nodeTarget = null;
-		this.stateMachine.nodeToTransferDestiny = null;
-		this.stateMachine.nodeToTransferOrigin = null;
+		int state = this.stateMachine.getStateGame();
+		if(state == 3 || state == 5 || state == 6 || state == 7) {
+
+			this.stateMachine.nodeAttacker = null;
+			this.stateMachine.nodeTarget = null;
+			this.stateMachine.nodeToTransferDestiny = null;
+			this.stateMachine.nodeToTransferOrigin = null;
+		}
 		
-		if (this.stateMachine.getStateGame() == 3) {
+		if (state == 3) {
 			this.stateMachine.listOfAuxPutOrRelocatePiece = AuxPutOrRelocatePiece.getStructureToRelocatePieces(this.stateMachine.currentPlayer);
 			
 			// TODO : quem deve transitar de um estado para o outro é o stateMachine....
 			this.stateMachine.setStateGame(7);
-		} else if (this.stateMachine.getStateGame() == 7)  {
+		} else if (state == 7)  {
 			this.stateMachine.nextTurn();
 		}
 	}
@@ -531,23 +527,12 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	}
 
 	@Override
-	public void run() { /*
-		while (true) {
-			try {
-				Thread.sleep(300);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			this.update(this.getGraphics());
-			repaint();
-		} */
+	public void run() {
 		initGame();
-		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("action performed");
 		repaint();
 	}
 	
