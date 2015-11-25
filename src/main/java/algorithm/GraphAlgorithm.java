@@ -1,14 +1,13 @@
 package algorithm;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import auxiliaryEntities.AuxDistances;
 import entities.Graph;
 import entities.Node;
 import entities.Vertice;
-import auxiliaryEntities.AuxDistances;
 
 public class GraphAlgorithm {
 
