@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -63,6 +64,14 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	public Image imgEstadoColocarPecasContinente;
 	public Image imgEstadoRemanejamento;
 	public Image imgEstadoTurnoComputador;
+	
+	
+	public static MP3Player victoryMusic = new MP3Player("/musics/victorymusic.mp3");
+	public static MP3Player failMusic =  new MP3Player("/musics/failmusic.mp3");
+	public static MP3Player attack1Music = new MP3Player("/musics/tuturu_1.mp3");
+	public static MP3Player attack2Music = new MP3Player("/musics/boomheadshot.swf.mp3");
+	public static MP3Player attackfailMusic = new MP3Player("/musics/failattack.mp3");
+
 
 	public GameInterface() {
 		Graph graph = Graph.getGraphWithDefaultConfiguration();
@@ -118,6 +127,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
         });
 		
 		initButtons();
+
 		this.stateMachine.setStateGame(0);
 	}
 	
@@ -158,7 +168,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		time.start();		
 		
 		this.game = new Thread(this);
-		game.start();		
+		game.start();
 		
 	}
 
@@ -206,7 +216,10 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 					this.stateMachine.nodeAttacker = null;
 					this.stateMachine.nodeTarget = null;
 				}
-				this.stateMachine.theGameHasEnded();
+				if(this.stateMachine.theGameHasEnded()) {
+					this.stateMachine.setStateGame(8);
+					this.stateMachine.stage8();
+				}
 			} else {
 			}
 		} else if (this.stateMachine.getStateGame() == 5) { // estado para colocar peças, jogador...
@@ -428,7 +441,8 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 				}
 			}
 			for (Node n : this.gameExecutor.getGraph().getNodes()) {
-				if(n.getPlayer().getColorEnum().getColor().equals(Color.BLACK)) {
+				Color k = n.getPlayer().getColorEnum().getColor();
+				if(k.equals(Color.BLACK) || k.equals(Color.RED) || k.equals(Color.BLUE)) {
 					g2d.setColor(Color.WHITE);
 				} else {
 					g2d.setColor(Color.BLACK);

@@ -207,6 +207,12 @@ public class GameExecutor {
 			DadosJogados d = MathAlgorithm.war(
 					nodeAttacker.getNumberOfPieces() - 1,
 					nodeTarget.getNumberOfPieces());
+			
+			if(pa.isPlayer()) {
+				if(d.defLost == 0) {
+					GameInterface.attackfailMusic.doIt();
+				}
+			}
 
 			nodeTarget.setNumberOfPieces(nodeTarget
 					.getNumberOfPieces() - d.defLost);
@@ -217,11 +223,17 @@ public class GameExecutor {
 			if (nodeTarget.getNumberOfPieces() == 0) {
 				Player playerTarget = nodeTarget.getPlayer();
 
+				if(pa.isPlayer()) {
+					GameInterface.attack1Music.doIt();
+				} else {
+					GameInterface.attack2Music.doIt();
+				}
 				int transferedPieces = nodeAttacker.getNumberOfPieces() - 1;
 				if (transferedPieces > 3) {
 					transferedPieces = 3;
 				}
 
+				
 				// removo a o node do player alvo
 				nodeTarget.getPlayer().getNodes().remove(nodeTarget);
 
@@ -235,6 +247,7 @@ public class GameExecutor {
 				nodeAttacker.getPlayer().getNodes().add(nodeTarget);
 				
 				verifyObjetive(pa,pt);
+				
 				if(playerTarget.getNodes().size() == 0) {
 					System.out.println("Player "+pa.getColorEnum().getName()+" destruiu o player "+pt.getColorEnum().getName());
 					getPlayers().remove(playerTarget);

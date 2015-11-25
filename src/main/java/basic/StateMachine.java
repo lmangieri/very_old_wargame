@@ -14,6 +14,7 @@ import entities.Player;
 
 public class StateMachine implements Runnable {
 	public GameExecutor gameExecutor;
+
 	public GraphAlgorithm graphAlgorithm;
 	public StrategiesAlgorithm strategiesAlgorithm;
 	private Thread state2Thread;
@@ -39,7 +40,7 @@ public class StateMachine implements Runnable {
 	public Node nodeToTransferOrigin;
 	public Node nodeToTransferDestiny;
 	
-	public StateMachine(GameExecutor gameExecutor) {
+	public StateMachine(GameExecutor gameExecutor ) {
 		this.gameExecutor = gameExecutor;
 		graphAlgorithm = new GraphAlgorithm(this.gameExecutor.getGraph());
 		strategiesAlgorithm = new StrategiesAlgorithm(this.gameExecutor.getGraph());
@@ -212,6 +213,11 @@ public class StateMachine implements Runnable {
 	
 	// FIM DE JOGO
 	public void stage8() {
+		if(currentPlayer.isPlayer()) {
+			GameInterface.victoryMusic.doIt();
+		} else {
+			GameInterface.failMusic.doIt();
+		}
 		System.out.println("Vencedor = "+currentPlayer.getColorEnum().getName());
 	}
 	
