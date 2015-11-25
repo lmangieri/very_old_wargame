@@ -111,7 +111,9 @@ public class ObjetiveInitializer {
 		
 		if(obj.getIdentifier() > 8) {
 			if(obj.getTargets().get(0).getPlayer().equals(p)) {
-				p.setObjetive(new ConquerTwentyFourCountriesObjetive(obj.getIdentifier(),gameExecutor));
+				obj = new ConquerTwentyFourCountriesObjetive(obj.getIdentifier(),gameExecutor);
+				obj.setImageObjetive(new ImageIcon(getClass().getResource("/images/objetive24ter.png")).getImage());
+				p.setObjetive(obj);
 				return;
 			}
 		}
