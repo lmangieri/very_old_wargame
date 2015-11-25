@@ -18,7 +18,6 @@ public class GraphAlgorithm {
 		this.graph = graph;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<String> wayToTarget(String nodeOriginName, String nodeDestinyName) {
 		List<AuxDistances> distances = getDistancesNotInitialize();
 		Node originNode = this.graph.getNodeByName(nodeOriginName);
@@ -51,12 +50,12 @@ public class GraphAlgorithm {
 		return getDistanceFromNode(distances, this.graph.getNodeByName(nodeDestinyName));
 	}
 	
-	private void printVectorDistances(List<AuxDistances> distances) { 
-		Collections.sort(distances);
-		for(AuxDistances ad : distances) {
-			System.out.println(ad.name + " " + ad.distance);
-		}
-	}
+//	private void printVectorDistances(List<AuxDistances> distances) { 
+//		Collections.sort(distances);
+//		for(AuxDistances ad : distances) {
+//			System.out.println(ad.name + " " + ad.distance);
+//		}
+//	}
 	
 	private List<String> getDistanceFromNode(List<AuxDistances> distances, Node n) {
 		for(AuxDistances ad : distances) {

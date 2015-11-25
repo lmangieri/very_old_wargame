@@ -1,22 +1,17 @@
 package basic;
 
 import java.awt.Checkbox;
-import java.awt.CheckboxGroup;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.Timer;
 
 import utils.CheckboxGroupList;
@@ -86,10 +81,9 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			}
 		});
 
-		ImageIcon icon = new ImageIcon(getClass().getResource(
-				"/images/paintedCropped.png"));
-		this.imgBoard = icon.getImage();
-		
+		this.imgBoard = new ImageIcon(getClass().getResource(
+				"/images/paintedCropped.png")).getImage();
+		ImageIcon icon;
 		icon = new ImageIcon(getClass().getResource("/images/initialScreen.png"));
 		this.initialScreen = icon.getImage();
 		

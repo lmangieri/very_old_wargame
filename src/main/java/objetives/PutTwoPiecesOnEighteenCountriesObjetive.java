@@ -5,11 +5,9 @@ import java.util.List;
 
 import basic.GameExecutor;
 import entities.Node;
-import entities.Player;
 
 public class PutTwoPiecesOnEighteenCountriesObjetive implements Objetive {
 
-	private Player p;
 	private int identifier;	
 	GameExecutor gameExecutor;
 	private Image imageObjetive;

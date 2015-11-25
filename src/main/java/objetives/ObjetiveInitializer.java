@@ -100,7 +100,8 @@ public class ObjetiveInitializer {
 			objetives.add(objetive);
 		} catch (PlayerWithColorNotExist e) {
 			objetive = new ConquerTwentyFourCountriesObjetive(identifier,gameExecutor);
-			objetive.setImageObjetive(new ImageIcon(getClass().getResource("/images/objetive24ter.png")).getImage());
+			img = new ImageIcon(getClass().getResource("/images/objetive24ter.png")).getImage();
+			objetive.setImageObjetive(img);
 			objetives.add(objetive);
 		}
 	}

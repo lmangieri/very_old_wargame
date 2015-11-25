@@ -1,11 +1,9 @@
 package objetives;
 
 import java.awt.Image;
-import java.util.Collections;
 import java.util.List;
 
 import basic.GameExecutor;
-import basic.GameInterface;
 import entities.Node;
 
 public class ConquerTwentyFourCountriesObjetive implements Objetive {
