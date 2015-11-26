@@ -8,7 +8,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
-import java.io.File;
+import java.util.Iterator;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -283,7 +283,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			}
 		}
 
-		if (this.stateMachine.numberOfPiecesToPut == 0) {
+		if (this.stateMachine.numberOfPiecesToPut <= 0) {
 			this.stateMachine.listOfStructureAuxToPutPiecesOnContinent = StructureAuxToPutPiecesOnContinent.getListOfStructureAuxToPutPiecesOnContinent(this.stateMachine.currentPlayer, this.gameExecutor.getGraph().getContinentes());
 			if(this.strategiesAlgorithm.isListOfStructureAuxToPutPiecesOnContinentIsEmpty(this.stateMachine.listOfStructureAuxToPutPiecesOnContinent)) {
 				this.stateMachine.setStateGame(3);
@@ -432,15 +432,21 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			g2d.drawImage(imgFooter, 0, 790, null);
 			g2d.drawImage(imgPlayerObjetive, 0, 790, null);
 			
-
+			Iterator<Node> iterator;
 	
 			/* Desenhando circulos com seus respectivos exércitos */
 			for (Player p : gameExecutor.getPlayers()) {
-				for (Node n : p.getNodes()) {
+				iterator = p.getNodes().iterator();
+				while(iterator.hasNext()) {
+					Node n = iterator.next();
 					drawCircle(g2d, n.x, n.y, p.getColorEnum().getColor(), 25, true);
 				}
 			}
-			for (Node n : this.gameExecutor.getGraph().getNodes()) {
+			
+			iterator = this.gameExecutor.getGraph().getNodes().iterator();
+			
+			while(iterator.hasNext()) {
+				Node n = iterator.next();
 				Color k = n.getPlayer().getColorEnum().getColor();
 				if(k.equals(Color.BLACK) || k.equals(Color.RED) || k.equals(Color.BLUE)) {
 					g2d.setColor(Color.WHITE);

@@ -2,11 +2,12 @@ package objetives;
 
 import java.awt.Image;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import entities.Node;
 
 public interface Objetive {
-	public List<Node> getTargets();
+	public ConcurrentLinkedQueue<Node> getTargets();
 	public void setIdentifier(int identifier);
 	public int getIdentifier();
 	

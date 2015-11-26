@@ -91,7 +91,7 @@ public class GameExecutor {
 		// Collections.shuffle(players);
 		while (tot > 0) {
 			for (Player p : players) {
-				strategiesAlgorithm.decideNextPiece(p,null).addNumberOfPieces(1);
+				strategiesAlgorithm.decideNextPieceToPut(p,null).addNumberOfPieces(1);
 			}
 			tot = tot - 1;
 		}
@@ -99,7 +99,7 @@ public class GameExecutor {
 
 	public void putPieceToAPlayer(Player p, int tot) {
 		while (tot > 0) {
-			strategiesAlgorithm.decideNextPiece(p,null).addNumberOfPieces(1);
+			strategiesAlgorithm.decideNextPieceToPut(p,null).addNumberOfPieces(1);
 			tot = tot - 1;
 		}
 	}
@@ -194,7 +194,7 @@ public class GameExecutor {
 		}
 		
 		while(numberOfPieces > 0) {
-			this.strategiesAlgorithm.decideNextPiece(p, c).addNumberOfPieces(1);
+			this.strategiesAlgorithm.decideNextPieceToPut(p, c).addNumberOfPieces(1);
 			numberOfPieces = numberOfPieces -1;
 		}
 	}

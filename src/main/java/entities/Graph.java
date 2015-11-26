@@ -3,19 +3,20 @@ package entities;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import algorithm.GraphAlgorithm;
 import algorithm.StrategiesAlgorithm;
 import enums.ContinentNames;
 
 public class Graph {
-	private List<Node> nodes;
+	private ConcurrentLinkedQueue<Node> nodes;
 	private List<Vertice> vertices;
 	private List<Continent> continentes;
 	private GraphAlgorithm graphAlgorithm;
 	private StrategiesAlgorithm strategiesAlgorithm;
 
-	public Graph(List<Node> nodes, List<Vertice> vertices, List<Continent> continentes) {
+	public Graph(ConcurrentLinkedQueue<Node> nodes, List<Vertice> vertices, List<Continent> continentes) {
 		this.continentes = continentes;
 		this.nodes = nodes;
 		this.vertices = vertices;
@@ -23,10 +24,10 @@ public class Graph {
 		setStrategiesAlgorithm(new StrategiesAlgorithm(this));
 	}
 	
-	public List<Node> getNodes() {
+	public ConcurrentLinkedQueue<Node> getNodes() {
 		return nodes;
 	}
-	public void setNodes(List<Node> nodes) {
+	public void setNodes(ConcurrentLinkedQueue<Node> nodes) {
 		this.nodes = nodes;
 	}
 	public List<Vertice> getVertices() {
@@ -399,11 +400,15 @@ public class Graph {
 		Vertice v159 = new Vertice(nAustralia,nSumatra,1);
 		nAustralia.setVertices(Arrays.asList(v157,v158,v159));
 		
-		Graph graph = new Graph(
-		Arrays.asList(nArgentina,nBrasil,nChile,nColombia,nMexico,nCuba,nCalifornia,nNovaYork,nVancouver,nOtawa,nLabrador,nGroelandia,
+		
+		ConcurrentLinkedQueue<Node> nodes = new ConcurrentLinkedQueue<>();
+		nodes.addAll(Arrays.asList(nArgentina,nBrasil,nChile,nColombia,nMexico,nCuba,nCalifornia,nNovaYork,nVancouver,nOtawa,nLabrador,nGroelandia,
 				nAlasca,nMackenzie,nAfricaDoSul,nMadagascar,nCongo,nSudao,nNigeria,nEgito,nIslandia,nInglaterra,nSuecia,nMoscou,
 				nPortugal,nPolonia,nAlemanha,nOrienteMedio,nIndia,nVietna,nChina,nJapao,nAral,nOmsk,nDudinka,nSiberia,nVladivostok,
-				nTchita,nMongolia,nSumatra,nBorneo,nNovaGuine,nAustralia),
+				nTchita,nMongolia,nSumatra,nBorneo,nNovaGuine,nAustralia));
+		
+		Graph graph = new Graph(
+		nodes,
 		Arrays.asList(v1,v2,v3,v4,v5,v5_1,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22,v23,v24,v25,v26,
 				v27,v28,v29,v30,v31,v32,v33,v34,v35,v36,v37,v38,v39,v40,v41,v42,v43,v44,v45,v46,v47,v48,v49,v50,
 				v51,v52,v53,v54,v55,v56,v57,v58,v59,v60,v61,v62,v63,v64,v65,v66,v67,v68,v69,v70,v71,v72,v73,v74,

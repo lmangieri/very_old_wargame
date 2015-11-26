@@ -2,6 +2,7 @@ package objetives;
 
 import java.awt.Image;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import entities.Node;
 import entities.Player;
@@ -31,7 +32,7 @@ public class DestroyAnColorObjetive implements Objetive {
 	}
 	
 	@Override
-	public List<Node> getTargets() {
+	public ConcurrentLinkedQueue<Node> getTargets() {
 		return p.getNodes();
 	}
 	

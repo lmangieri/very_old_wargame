@@ -105,5 +105,24 @@ public class Node {
 			}
 		}
 		return true;
-	}	
+	}
+	
+	public boolean canAttack() {
+		if((this.getNumberOfPieces() > 1) && (!this.isLocked()) ) {
+			return true;
+		}
+		return false;
+	}
+	
+	public int numberOfEnemysAdjacent() {
+		int count = 0;
+		for(Vertice v : getVertices()) {
+			if(!v.getDestiny().getPlayer().equals(this.player)) {
+				count = count + 1;
+			}
+		}
+		
+		return count;
+		
+	}
 }

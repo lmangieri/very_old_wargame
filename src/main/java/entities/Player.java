@@ -2,6 +2,7 @@ package entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import objetives.Objetive;
 
@@ -15,12 +16,12 @@ public class Player {
 	
 	private Objetive objetive;
 	
-	private List<Node> nodes;
+	private ConcurrentLinkedQueue<Node> nodes;
 	
 	private ColorEnum colorEnum;
 	
 	public Player(ColorEnum color, boolean isPlayer) {
-		this.nodes = new ArrayList<>();
+		this.nodes = new ConcurrentLinkedQueue<>();
 		this.colorEnum = color;
 		this.isPlayer = isPlayer;
 	}
@@ -33,11 +34,11 @@ public class Player {
 		this.isPlayer = isPlayer;
 	}
 	
-	public synchronized List<Node> getNodes() {
-		return nodes;
+	public synchronized ConcurrentLinkedQueue<Node> getNodes() {
+		return  nodes;
 	}
 
-	public void setNodes(List<Node> nodes) {
+	public void setNodes(ConcurrentLinkedQueue<Node> nodes) {
 		this.nodes = nodes;
 	}
 	

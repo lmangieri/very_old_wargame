@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import basic.GameExecutor;
 import algorithm.MathAlgorithm;
+import basic.GameExecutor;
+import entities.Node;
 import entities.Player;
 import enums.ColorEnum;
 import enums.ContinentNames;
@@ -109,8 +111,10 @@ public class ObjetiveInitializer {
 	public void giveAnObjective(Player p) {
 		Objetive obj = objetives.remove(MathAlgorithm.getRandomInt(objetives.size()));
 		
+		
 		if(obj.getIdentifier() > 8) {
-			if(obj.getTargets().get(0).getPlayer().equals(p)) {
+			Iterator<Node> iterator = obj.getTargets().iterator(); 
+			if(iterator.next().getPlayer().equals(p)) {
 				obj = new ConquerTwentyFourCountriesObjetive(obj.getIdentifier(),gameExecutor);
 				obj.setImageObjetive(new ImageIcon(getClass().getResource("/images/objetive24ter.png")).getImage());
 				p.setObjetive(obj);

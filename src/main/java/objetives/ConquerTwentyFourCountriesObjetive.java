@@ -2,6 +2,7 @@ package objetives;
 
 import java.awt.Image;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import basic.GameExecutor;
 import entities.Node;
@@ -28,7 +29,7 @@ public class ConquerTwentyFourCountriesObjetive implements Objetive {
 	
 	
 	@Override
-	public List<Node> getTargets() {
+	public ConcurrentLinkedQueue<Node> getTargets() {
 		return gameExecutor.getGraph().getNodes();
 	}
 	

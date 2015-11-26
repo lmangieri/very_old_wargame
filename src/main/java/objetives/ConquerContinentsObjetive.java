@@ -3,6 +3,7 @@ package objetives;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import entities.Continent;
 import entities.Node;
@@ -31,8 +32,8 @@ public class ConquerContinentsObjetive implements Objetive {
 	}
 	
 	@Override
-	public List<Node> getTargets() {
-		List<Node> targets = new ArrayList<>();
+	public ConcurrentLinkedQueue<Node> getTargets() {
+		ConcurrentLinkedQueue<Node> targets = new ConcurrentLinkedQueue<>();
 		for(Continent c : targetContinents) {
 			targets.addAll(c.getCountries());
 		}

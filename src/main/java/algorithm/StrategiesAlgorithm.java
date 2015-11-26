@@ -3,6 +3,7 @@ package algorithm;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import objetives.PutTwoPiecesOnEighteenCountriesObjetive;
 import auxiliaryEntities.AuxPutOrRelocatePiece;
@@ -61,7 +62,7 @@ public class StrategiesAlgorithm {
 
 
 	// Decide o próximo node que o computador colocará a peça...
-	public Node decideNextPiece(Player p, Continent c) {
+	public Node decideNextPieceToPut(Player p, Continent c) {
 		ColorEnum playerColor = p.getColorEnum();
 		
 
@@ -83,9 +84,9 @@ public class StrategiesAlgorithm {
 				aux.setRate(-20);
 			} else {
 				if (this.isThisNodeFromAnDominatedContinent(aux.getNode())) {
-					aux.setRate(2);
+					aux.increaseRate(10);
 					if(isThisNodeUnprotected(aux.getNode())) {
-						aux.increaseRate();
+						aux.increaseRate(20);
 					}
 				} else {
 					if (this.isThisNodeWithMajorityOnHisCountry(aux.getNode())) {
@@ -113,6 +114,11 @@ public class StrategiesAlgorithm {
 		// ANALISANDO OBJETIVO DE CONQUISTAR 18 TERRITÓRIOS E TER 2 PEÇAS EM CADA UM.
 		if(p.getObjetive().getClass().equals(PutTwoPiecesOnEighteenCountriesObjetive.class)) {
 			analyzingPutPieceForPutTwoPiecesOnEighteenCountriesObjetive(p, auxPutPiecesList);
+		}
+		
+		for(AuxPutOrRelocatePiece n : auxPutPiecesList) {
+			n.increaseRate(n.getNode().getNumberOfPieces() * -3);
+			n.increaseRate(n.getNode().getNumberOfPieces() * 2);
 		}
 		
 
@@ -159,17 +165,27 @@ public class StrategiesAlgorithm {
 	}
 	
 	public Node decideNextTarget(Node n) {
-		if(n.getNumberOfPieces() == 1) {
+		int numberOfPieces = n.getNumberOfPieces();
+		
+		if(numberOfPieces == 1) {
 			return null;
 		}
 		
-		List<Node> targets = n.getPlayer().getObjetive().getTargets();
+		if(isThisNodeFromAnDominatedContinent(n)) {  // impedir que o node ataque caso esteja defendendo o continente.
+			if(numberOfPieces <= 3) {
+				return null;
+			}
+		}
+		
+		ConcurrentLinkedQueue<Node> targets = n.getPlayer().getObjetive().getTargets();
 		if(!targets.isEmpty()) {
 			for(Node tar : targets) {  // o alvo que vem do dobjetivo pode já pertencer ao jogador...
 				
 				if(!tar.getPlayer().getColorEnum().equals(n.getPlayer().getColorEnum())) {
-					if(isThisNodeAdjacentTo(n,tar)) {
-						return tar;
+					if(isThisNodeAdjacentTo(n,tar)) { // TODO: isso é necessário ?
+						if(!(numberOfPieces == 2 && tar.getNumberOfPieces() > 1)) {
+							return tar;
+						}
 					}
 				}
 			}
@@ -177,7 +193,9 @@ public class StrategiesAlgorithm {
 		
 		for(Vertice v : n.getVertices()) {
 			if(!v.getDestiny().getPlayer().getColorEnum().equals(n.getPlayer().getColorEnum())) {
-				return v.getDestiny();
+				if(!(numberOfPieces == 2 && v.getDestiny().getNumberOfPieces() > 1)) {
+					return v.getDestiny();
+				}
 			}
 		}		
 		return null;
