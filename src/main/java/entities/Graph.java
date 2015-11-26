@@ -1,9 +1,12 @@
 package entities;
 
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import javax.swing.ImageIcon;
 
 import algorithm.GraphAlgorithm;
 import algorithm.StrategiesAlgorithm;
@@ -80,6 +83,9 @@ public class Graph {
 	
 	
 	public static Graph getGraphWithDefaultConfiguration() {
+
+		
+		
 		List<Continent> continentes = new ArrayList<>();
 		Node nArgentina = new Node("Argentina",217,626,ContinentNames.AMERICA_DO_SUL.getName()); 
 		Node nBrasil = new Node("Brasil",276,545,ContinentNames.AMERICA_DO_SUL.getName());        

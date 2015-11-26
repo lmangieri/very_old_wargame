@@ -2,6 +2,7 @@ package basic;
 
 import java.awt.Checkbox;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -432,6 +433,17 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			g2d.drawImage(imgFooter, 0, 790, null);
 			g2d.drawImage(imgPlayerObjetive, 0, 790, null);
 			
+			if (this.stateMachine.getStateGame() == 6) {
+				if(this.stateMachine.currentPlayer.isPlayer()) {
+					for(StructureAuxToPutPiecesOnContinent aux : this.stateMachine.listOfStructureAuxToPutPiecesOnContinent) {
+						if(aux.numberOfPieces > 0) {
+							g2d.drawImage(aux.continent.image, 0, 0, null);
+						}
+
+					}
+				}
+			}
+			
 			Iterator<Node> iterator;
 	
 			/* Desenhando circulos com seus respectivos exércitos */
@@ -457,7 +469,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 				g2d.drawString(Integer.toString(n.getNumberOfPieces()), n.x + 10,
 						n.y + 15);
 			}
-	
+			
 			/* Desenhando círculos dos steps */
 			drawStepCircles(g2d);
 	
@@ -484,6 +496,10 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			Node tempNt = this.stateMachine.nodeTarget;
 			if(tempNa != null && tempNt != null){
 				drawArrow(g2d, tempNa.x, tempNa.y, tempNt.x, tempNt.y);
+			}
+			
+			if (this.stateMachine.getStateGame() == 5) {
+				g2d.drawString(Integer.toString(this.stateMachine.numberOfPiecesToPut) + " peças",390,910);
 			}
 
 		}
