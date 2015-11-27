@@ -101,7 +101,7 @@ public class GameExecutor {
 		}
 	}
 
-	public void putPieceToAPlayer(Player p, int tot) {
+	public void putPieceToComputer(Player p, int tot) {
 		while (tot > 0) {
 			strategiesAlgorithm.decideNextPieceToPut(p,null).addNumberOfPieces(1);
 			tot = tot - 1;
@@ -150,9 +150,6 @@ public class GameExecutor {
 		return this.players.size();
 	}
 
-	public void setTotalPlayers(int totalPlayers) {
-	}
-
 	public Graph getGraph() {
 		return graph;
 	}
@@ -162,7 +159,7 @@ public class GameExecutor {
 	}
 
 	// TODO : mudar o nome deste método.
-	public void putPiecesOnContinent(Player p) {
+	public void putPiecesOnContinentForComputer(Player p) {
 		ColorEnum colorPlayer = p.getColorEnum();
 		boolean hasContinent = true;
 
@@ -174,28 +171,14 @@ public class GameExecutor {
 				}
 			}
 			if (hasContinent) {
-				putPiecesOnContinent(p, c);
+				putPiecesOnContinentForComputer(p, c);
 			}
 			hasContinent = true;
 		}
-
 	}
 
-	private void putPiecesOnContinent(Player p, Continent c) {
-		int numberOfPieces = 0;
-		if (c.getName().equals(ContinentNames.AFRICA.getName())) {
-			numberOfPieces = 3;
-		} else if (c.getName().equals(ContinentNames.AMERICA_DO_NORTE.getName())) {
-			numberOfPieces = 5;
-		} else if (c.getName().equals(ContinentNames.AMERICA_DO_SUL.getName())) {
-			numberOfPieces = 2;
-		} else if (c.getName().equals(ContinentNames.ASIA.getName())) {
-			numberOfPieces = 7;
-		} else if (c.getName().equals(ContinentNames.OCEANIA.getName())) {
-			numberOfPieces = 3;
-		} else if (c.getName().equals(ContinentNames.EUROPA.getName())) {
-			numberOfPieces = 5;
-		}
+	private void putPiecesOnContinentForComputer(Player p, Continent c) {
+		int numberOfPieces = c.getPiecesToFillContinent();
 		
 		while(numberOfPieces > 0) {
 			this.strategiesAlgorithm.decideNextPieceToPut(p, c).addNumberOfPieces(1);
@@ -251,18 +234,20 @@ public class GameExecutor {
 
 				nodeAttacker.getPlayer().getNodes().add(nodeTarget);
 				
-				verifyObjetive(pa,pt);
+				verifyIfAnyOneMustChangeTheObjetive(pa,pt);
 				
 				if(playerTarget.getNodes().size() == 0) {
 					System.out.println("Player "+pa.getColorEnum().getName()+" destruiu o player "+pt.getColorEnum().getName());
 					getPlayers().remove(playerTarget);
-					setTotalPlayers(getTotalPlayers() -1);
 				}
 			}
 		}
 	}
 	
-	public void verifyObjetive(Player playerAttacker, Player playerTarget) {
+	
+	/* Regra: se o objetivo do jogador AL é destruir os exércitos da cor COL, porém, outro jogador destrói o último país de cor COL, então
+	 * o objetivo de AL passa a ser de conquistar 24 territórios */
+	public void verifyIfAnyOneMustChangeTheObjetive(Player playerAttacker, Player playerTarget) {
 		if(playerTarget.getNodes().size() == 0) {
 			for(Player p : getPlayers()) {
 				if(!p.equals(playerAttacker)) {

@@ -86,7 +86,7 @@ public class StateMachine implements Runnable {
 			if (!p.isPlayer()) {
 				this.setStateGame(6);
 				this.gameExecutor
-						.putPieceToAPlayer(p, this.numberOfPiecesToPut);
+						.putPieceToComputer(p, this.numberOfPiecesToPut);
 				this.numberOfPiecesToPut = 0;
 				this.stage6();
 			}
@@ -102,7 +102,7 @@ public class StateMachine implements Runnable {
 		Player p = this.gameExecutor.getPlayers().get(
 				this.currentIndex % this.gameExecutor.getTotalPlayers());
 		this.currentPlayer = p;
-		this.gameExecutor.putPiecesOnContinent(p);
+		this.gameExecutor.putPiecesOnContinentForComputer(p);
 
 		this.setStateGame(3);
 		this.stage3();

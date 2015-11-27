@@ -123,6 +123,15 @@ public class Node {
 		}
 		
 		return count;
-		
 	}
+	
+	public boolean isAdjacentTo(Node n2) {
+		for(Vertice v : getVertices()) {
+			if(v.getDestiny().equals(n2)) {
+				return true;
+			}
+		}
+		return false;
+	}	
+	
 }

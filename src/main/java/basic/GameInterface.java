@@ -79,6 +79,8 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			"/musics/boomheadshot.swf.mp3");
 	public static MP3Player attackfailMusic = new MP3Player(
 			"/musics/failattack.mp3");
+	public static MP3Player teleportMusic = new MP3Player(
+			"/musics/teleport.mp3");
 
 	public GameInterface() {
 		Graph graph = Graph.getGraphWithDefaultConfiguration();
@@ -286,7 +288,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			if (aux.getNode().equals(this.stateMachine.nodeToTransferOrigin)) {
 				aux.setPiecesThatCanBeRelocated(aux
 						.getPiecesThatCanBeRelocated() - 1);
-
+				teleportMusic.doIt();
 				this.stateMachine.nodeToTransferOrigin.addNumberOfPieces(-1);
 				this.stateMachine.nodeToTransferDestiny.addNumberOfPieces(1);
 
@@ -381,30 +383,26 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		for (Node n : this.gameExecutor.getGraph().getNodes()) {
 			int distance = MathAlgorithm.distanceBetween(x, y, n.x, n.y);
 			if (distance < 50) {
+				
+				
 				if (n.getPlayer().getColorEnum()
 						.equals(this.stateMachine.currentPlayer.getColorEnum())
 						&& n.getNumberOfPieces() > 1) {
+					
+					
 					this.stateMachine.nodeAttacker = n;
-					boolean flag = false;
-					if (this.stateMachine.nodeTarget != null) {
-						for (Vertice v : this.stateMachine.nodeAttacker
-								.getVertices()) {
-							if (v.getDestiny() == this.stateMachine.nodeTarget) {
-								flag = true;
-							}
-						}
-						if (!flag) {
-							this.stateMachine.nodeTarget = null;
-						}
-					}
-				} else if ((!n.getPlayer().getColorEnum()
-						.equals(this.stateMachine.currentPlayer.getColorEnum()))) {
+					this.stateMachine.nodeTarget = null;
+					wasASelectClick = true;
+					
+					
+				} else if ((!n.getPlayer()
+						.equals(this.stateMachine.currentPlayer))) {
 					this.stateMachine.nodeTarget = n;
 					boolean flag = false;
 					if (this.stateMachine.nodeAttacker != null) {
-						for (Vertice v : this.stateMachine.nodeTarget
+						for (Vertice v : this.stateMachine.nodeAttacker
 								.getVertices()) {
-							if (v.getDestiny() == this.stateMachine.nodeAttacker) {
+							if (v.getDestiny() == n) {
 								flag = true;
 							}
 						}
@@ -412,8 +410,9 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 							this.stateMachine.nodeAttacker = null;
 						}
 					}
+					wasASelectClick = true;
 				}
-				wasASelectClick = true;
+				
 				break;
 			}
 		}
@@ -442,8 +441,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 
 					} else {
 
-						if (this.strategiesAlgorithm.isThisNodeAdjacentTo(
-								this.stateMachine.nodeToTransferOrigin, n)) {
+						if (this.stateMachine.nodeToTransferOrigin.isAdjacentTo(n)) {
 
 							for (AuxPutOrRelocatePiece aux : this.stateMachine.listOfAuxPutOrRelocatePiece) {
 

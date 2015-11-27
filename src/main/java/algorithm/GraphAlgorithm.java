@@ -44,17 +44,9 @@ public class GraphAlgorithm {
 			setNodeAsVisited(distances, currentNode);
 		}
 		
-		// printVectorDistances(distances);
-		
 		return getDistanceFromNode(distances, this.graph.getNodeByName(nodeDestinyName));
 	}
 	
-//	private void printVectorDistances(List<AuxDistances> distances) { 
-//		Collections.sort(distances);
-//		for(AuxDistances ad : distances) {
-//			System.out.println(ad.name + " " + ad.distance);
-//		}
-//	}
 	
 	private List<String> getDistanceFromNode(List<AuxDistances> distances, Node n) {
 		for(AuxDistances ad : distances) {
@@ -66,7 +58,7 @@ public class GraphAlgorithm {
 		return null;
 	}
 	
-	/*  */
+
 	private boolean isNodeVisited(List<AuxDistances> distances, Node n) {
 		for(AuxDistances ad : distances) {
 			if(ad.name.equals(n.getName())) {
@@ -80,7 +72,6 @@ public class GraphAlgorithm {
 		for(AuxDistances ad : distances) {
 			if(ad.name.equals(n.getName())) {
 				ad.distance = 0;
-				// ad.way = n.getName();
 				ad.ways.add(n.getName());
 			}
 		}

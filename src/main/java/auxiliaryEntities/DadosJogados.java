@@ -1,5 +1,6 @@
 package auxiliaryEntities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DadosJogados {
@@ -17,6 +18,8 @@ public class DadosJogados {
 	}
 	
 	public DadosJogados() {
+		dadosAtaque = new ArrayList<>();
+		dadosDefense = new ArrayList<>();
 		this.atqLost = 0;
 		this.defLost = 0;
 	}

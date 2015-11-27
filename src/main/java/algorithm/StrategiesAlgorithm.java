@@ -124,7 +124,6 @@ public class StrategiesAlgorithm {
 		
 
 		Collections.sort(auxPutPiecesList);
-		// printAuxPutPiecesList(auxPutPiecesList);
 		return auxPutPiecesList.get(0).getNode();
 	}
 	
@@ -144,13 +143,6 @@ public class StrategiesAlgorithm {
 			return true;
 		}
 		return false;
-	}
-
-	public void printAuxPutPiecesList(List<AuxPutOrRelocatePiece> auxPutPiecesList) {
-		for (AuxPutOrRelocatePiece aux : auxPutPiecesList) {
-			System.out.println("aux ... node -> " + aux.getNode().getName()
-					+ " rate -> " + aux.getRate());
-		}
 	}
 
 	private void findAndAddRateToNode(List<AuxPutOrRelocatePiece> auxPutPiecesList, Node n) {
@@ -183,7 +175,7 @@ public class StrategiesAlgorithm {
 			for(Node tar : targets) {  // o alvo que vem do dobjetivo pode já pertencer ao jogador...
 				
 				if(!tar.getPlayer().getColorEnum().equals(n.getPlayer().getColorEnum())) {
-					if(isThisNodeAdjacentTo(n,tar)) { // TODO: isso é necessário ?
+					if(n.isAdjacentTo(tar)) { // TODO: isso é necessário ?
 						if(!(numberOfPieces == 2 && tar.getNumberOfPieces() > 1)) {
 							return tar;
 						}
@@ -201,17 +193,6 @@ public class StrategiesAlgorithm {
 		}		
 		return null;
 	}
-	
-	// If n2 is adjacent to n1, return TRUE
-	public boolean isThisNodeAdjacentTo(Node n1, Node n2) {
-		for(Vertice v : n1.getVertices()) {
-			if(v.getDestiny().equals(n2)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	
 	// returns true if all pieces were used
 	public boolean isThisStructureAuxToPutPiecesOnContinentUtilized(List<StructureAuxToPutPiecesOnContinent> list) {
