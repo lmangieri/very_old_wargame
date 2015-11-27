@@ -70,7 +70,7 @@ public class Continent {
 		} else if (getName().equals(ContinentNames.ASIA.getName())) {
 			return 7;
 		} else if (getName().equals(ContinentNames.OCEANIA.getName())) {
-			return 3;
+			return 2;
 		} else if (getName().equals(ContinentNames.EUROPA.getName())) {
 			return 5;
 		}

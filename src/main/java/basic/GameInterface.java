@@ -65,6 +65,8 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	public Image imgEstadoColocarPecasContinente;
 	public Image imgEstadoRemanejamento;
 	public Image imgEstadoTurnoComputador;
+	public Image imgEstadoVitoria;
+	public Image imgEstadoDerrota;
 	
 	
 	public static MP3Player victoryMusic = new MP3Player("/musics/victorymusic.mp3");
@@ -117,6 +119,9 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		this.imgEstadoColocarPecasContinente = new ImageIcon(getClass().getResource("/images/estadoColocarPecasContinente.png")).getImage();
 		this.imgEstadoRemanejamento = new ImageIcon(getClass().getResource("/images/estadoRemanejamento.png")).getImage();
 		this.imgEstadoTurnoComputador = new ImageIcon(getClass().getResource("/images/estadoTurnoComputador.png")).getImage();
+		this.imgEstadoVitoria = new ImageIcon(getClass().getResource("/images/estadoVitoria.png")).getImage();
+		this.imgEstadoDerrota = new ImageIcon(getClass().getResource("/images/estadoDerrota.png")).getImage();
+		
 		
 		this.startButton = new JButton("Jogar");
 		this.add(this.startButton);
@@ -522,6 +527,12 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			g2d.drawImage(imgEstadoColocarPecasContinente,300,790,null);
 		} else if(stateGame == 7) {
 			g2d.drawImage(imgEstadoRemanejamento,300,790,null);
+		} else if(stateGame == 8) {
+			if(this.stateMachine.currentPlayer.isPlayer()) {
+				g2d.drawImage(imgEstadoVitoria,300,790,null);
+			} else {
+				g2d.drawImage(imgEstadoDerrota,300,790,null);
+			}
 		} else {
 			g2d.drawImage(imgEstadoTurnoComputador,300,790,null);
 		}
