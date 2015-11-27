@@ -28,6 +28,10 @@ public class GameExecutor {
 														// leave from here.
 
 	private List<Player> players;
+	
+	public DadosJogados d;
+	
+	public int velocityChoosed;
 
 	public GameExecutor(Graph graph) {
 		this.graph = graph;
@@ -204,10 +208,11 @@ public class GameExecutor {
 		Player pt = nodeTarget.getPlayer();
 		
 		if (nodeAttacker.getNumberOfPieces() > 1) {
-			DadosJogados d = MathAlgorithm.war(
+			this.d = MathAlgorithm.war(
 					nodeAttacker.getNumberOfPieces() - 1,
 					nodeTarget.getNumberOfPieces());
 			
+
 			if(pa.isPlayer()) {
 				if(d.defLost == 0) {
 					GameInterface.attackfailMusic.doIt();
@@ -255,7 +260,6 @@ public class GameExecutor {
 				}
 			}
 		}
-		
 	}
 	
 	public void verifyObjetive(Player playerAttacker, Player playerTarget) {

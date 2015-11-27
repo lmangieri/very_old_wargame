@@ -20,6 +20,7 @@ import utils.CheckboxGroupList;
 import algorithm.MathAlgorithm;
 import algorithm.StrategiesAlgorithm;
 import auxiliaryEntities.AuxPutOrRelocatePiece;
+import auxiliaryEntities.DadosJogados;
 import auxiliaryEntities.StructureAuxToPutPiecesOnContinent;
 import entities.Graph;
 import entities.Node;
@@ -67,6 +68,8 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	public Image imgEstadoTurnoComputador;
 	public Image imgEstadoVitoria;
 	public Image imgEstadoDerrota;
+	
+	public Image imgDados;
 	
 	
 	public static MP3Player victoryMusic = new MP3Player("/musics/victorymusic.mp3");
@@ -122,6 +125,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		this.imgEstadoVitoria = new ImageIcon(getClass().getResource("/images/estadoVitoria.png")).getImage();
 		this.imgEstadoDerrota = new ImageIcon(getClass().getResource("/images/estadoDerrota.png")).getImage();
 		
+		this.imgDados = new ImageIcon(getClass().getResource("/images/dados.png")).getImage();
 		
 		this.startButton = new JButton("Jogar");
 		this.add(this.startButton);
@@ -146,12 +150,16 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		String v = this.grpVelocityGame.getSelectedCheckbox().getLabel();
 		if(v.equals("Lento")) {
 			this.stateMachine.velocityChoosed = 1200;
+			this.gameExecutor.velocityChoosed = 1200;
 		} else if(v.equals("Normal")) {
 			this.stateMachine.velocityChoosed = 500;
+			this.gameExecutor.velocityChoosed = 500;
 		} else if(v.equals("Rápido")) {
 			this.stateMachine.velocityChoosed = 100;
+			this.gameExecutor.velocityChoosed = 100;
 		} else {
 			this.stateMachine.velocityChoosed = 0;
+			this.gameExecutor.velocityChoosed = 0;
 		}
 		this.startButton.setVisible(false);
 		for(Checkbox checkbox : this.grpColorsSelect.list) {
@@ -505,6 +513,26 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			
 			if (this.stateMachine.getStateGame() == 5) {
 				g2d.drawString(Integer.toString(this.stateMachine.numberOfPiecesToPut) + " peças",390,910);
+			}
+			
+			
+			g2d.drawImage(imgDados,600,790,null);
+			DadosJogados d = this.gameExecutor.d;
+			if(d != null) {
+				int count = 0;
+				g2d.setColor(Color.WHITE);
+				for(int n : d.dadosAtaque) {
+					n = n +1;
+					g2d.drawString(Integer.toString(n), 642 + count * 100, 835);
+					count = count + 1;
+				}
+				count = 0;
+				g2d.setColor(Color.BLACK);
+				for(int n : d.dadosDefense) {
+					n = n +1;
+					g2d.drawString(Integer.toString(n), 642 + count * 100, 885);
+					count = count + 1;
+				}
 			}
 
 		}

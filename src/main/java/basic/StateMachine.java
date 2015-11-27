@@ -139,14 +139,14 @@ public class StateMachine implements Runnable {
 					}
 
 					changeStateOfNodeAttackerAndNodeTarget(n, target);
-
-
 					try {
 						Thread.sleep(velocityChoosed);
+					    this.gameExecutor.d = null;
 					} catch (InterruptedException e) {
 					}
 					this.gameExecutor
-							.attack(this.nodeAttacker, this.nodeTarget); // ?????
+							.attack(this.nodeAttacker, this.nodeTarget);
+
 					changeStateOfNodeAttackerAndNodeTarget(null, null);
 				} else {
 					break;
@@ -154,6 +154,13 @@ public class StateMachine implements Runnable {
 
 			}
 		}
+		
+		try {
+			Thread.sleep(velocityChoosed);
+		    this.gameExecutor.d = null;
+		} catch (InterruptedException e) {
+		}
+		
 		if (!theGameHasEnded()) {
 			this.setStateGame(7);
 			this.stage7();

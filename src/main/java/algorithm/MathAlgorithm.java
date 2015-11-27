@@ -77,6 +77,8 @@ public class MathAlgorithm {
 		});
 		
 		DadosJogados d = new DadosJogados();
+		d.setDadosAtaque(dadosAtaque);
+		d.setDadosDefense(dadosDefense);
 		
 		
 		for(count = 0; count < natt && count < ndef ; count++) {
