@@ -117,8 +117,9 @@ public class StrategiesAlgorithm {
 		}
 		
 		for(AuxPutOrRelocatePiece n : auxPutPiecesList) {
-			n.increaseRate(n.getNode().getNumberOfPieces() * -3);
-			n.increaseRate(n.getNode().getNumberOfPieces() * 2);
+			if(n.getNode().getNumberOfPieces() > 3) {
+				n.increaseRate(n.getNode().getNumberOfPieces() * -2);
+			}
 		}
 		
 
