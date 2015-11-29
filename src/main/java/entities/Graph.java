@@ -84,8 +84,6 @@ public class Graph {
 	
 	public static Graph getGraphWithDefaultConfiguration() {
 
-		
-		
 		List<Continent> continentes = new ArrayList<>();
 		Node nArgentina = new Node("Argentina",217,626,ContinentNames.AMERICA_DO_SUL.getName()); 
 		Node nBrasil = new Node("Brasil",276,545,ContinentNames.AMERICA_DO_SUL.getName());        
@@ -425,6 +423,14 @@ public class Graph {
 		,continentes);
 		
 		return graph;
+	}
+
+	public void resizeNodeCoordenates(Double resize) {
+		for(Node n : this.getNodes()) {
+			n.x = (int) (n.x / resize);
+			n.y = (int) (n.y / resize);
+		}
+		
 	}
 
 

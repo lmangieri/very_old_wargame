@@ -2,21 +2,23 @@ package basic;
 
 import java.awt.Checkbox;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import utils.CheckboxGroupList;
 import algorithm.MathAlgorithm;
 import algorithm.StrategiesAlgorithm;
 import auxiliaryEntities.AuxPutOrRelocatePiece;
@@ -27,6 +29,7 @@ import entities.Node;
 import entities.Player;
 import entities.Vertice;
 import enums.ColorEnum;
+import utils.CheckboxGroupList;
 
 public class GameInterface extends JPanel implements ActionListener, Runnable {
 
@@ -35,6 +38,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private GameExecutor gameExecutor;
+	public double resize;
 
 	private JButton startButton;
 	private CheckboxGroupList grpColorsSelect;
@@ -82,8 +86,11 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	public static MP3Player teleportMusic = new MP3Player(
 			"/musics/teleport.mp3");
 
-	public GameInterface() {
+	public GameInterface(Double resize) {
+		this.resize = resize;
+		System.out.println(resize);
 		Graph graph = Graph.getGraphWithDefaultConfiguration();
+		graph.resizeNodeCoordenates(resize);
 		gameExecutor = new GameExecutor(graph);
 		this.stateMachine = new StateMachine(gameExecutor);
 		this.setLayout(null);
@@ -98,45 +105,34 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			}
 		});
 
-		this.imgBoard = new ImageIcon(getClass().getResource(
-				"/images/paintedCropped.png")).getImage();
-		ImageIcon icon;
-		icon = new ImageIcon(getClass()
-				.getResource("/images/initialScreen.png"));
-		this.initialScreen = icon.getImage();
 
-		icon = new ImageIcon(getClass().getResource("/images/footer.png"));
-		this.imgFooter = icon.getImage();
+		this.initialScreen = getFormatedImage("/images/initialScreen.png",resize);
 
-		icon = new ImageIcon(getClass().getResource(
-				"/images/swordWithLayerCleared.png"));
-		this.imgAttacker = icon.getImage();
+		this.imgBoard = getFormatedImage("/images/paintedCropped.png",resize);
+		
+		this.imgFooter = getFormatedImage("/images/footer.png",resize);
 
-		icon = new ImageIcon(getClass().getResource(
-				"/images/shieldWithLayerCleared.png"));
-		this.imgDefender = icon.getImage();
+		this.imgAttacker = getFormatedImage("/images/swordWithLayerCleared.png",resize);
+		
+		this.imgDefender = getFormatedImage("/images/shieldWithLayerCleared.png",resize);
 
-		icon = new ImageIcon(getClass().getResource("/images/circuloazul.png"));
-		this.imgBlueCircle = icon.getImage();
+		this.imgBlueCircle = getFormatedImage("/images/circuloazul.png",resize);
 
-		this.imgEstadoAtacar = new ImageIcon(getClass().getResource(
-				"/images/estadoAtacar.png")).getImage();
-		this.imgEstadoColocarPecas = new ImageIcon(getClass().getResource(
-				"/images/estadoColocarPecas.png")).getImage();
-		this.imgEstadoColocarPecasContinente = new ImageIcon(getClass()
-				.getResource("/images/estadoColocarPecasContinente.png"))
-				.getImage();
-		this.imgEstadoRemanejamento = new ImageIcon(getClass().getResource(
-				"/images/estadoRemanejamento.png")).getImage();
-		this.imgEstadoTurnoComputador = new ImageIcon(getClass().getResource(
-				"/images/estadoTurnoComputador.png")).getImage();
-		this.imgEstadoVitoria = new ImageIcon(getClass().getResource(
-				"/images/estadoVitoria.png")).getImage();
-		this.imgEstadoDerrota = new ImageIcon(getClass().getResource(
-				"/images/estadoDerrota.png")).getImage();
-
-		this.imgDados = new ImageIcon(getClass().getResource(
-				"/images/dados.png")).getImage();
+		this.imgEstadoAtacar = getFormatedImage("/images/estadoAtacar.png",resize);
+		
+		this.imgEstadoColocarPecas = getFormatedImage("/images/estadoColocarPecas.png",resize);
+		
+		this.imgEstadoColocarPecasContinente = getFormatedImage("/images/estadoColocarPecasContinente.png",resize);
+		
+		
+		this.imgEstadoRemanejamento = getFormatedImage("/images/estadoRemanejamento.png",resize);
+		
+		this.imgEstadoTurnoComputador = getFormatedImage("/images/estadoTurnoComputador.png",resize);
+		
+		this.imgEstadoVitoria = getFormatedImage("/images/estadoVitoria.png",resize);
+		
+		this.imgEstadoDerrota = getFormatedImage("/images/estadoDerrota.png",resize);
+		this.imgDados = getFormatedImage("/images/dados.png",resize);
 
 		this.startButton = new JButton("Jogar");
 		this.add(this.startButton);
@@ -230,7 +226,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	private void MouseClicked(java.awt.event.MouseEvent evt) {
 		int x = evt.getPoint().x;
 		int y = evt.getPoint().y;
-		if (x > 900 && y > 795) {
+		if (x > (int)(900/resize) && y > (int)(795/resize)) {
 			jumpStepButtonClicked(evt);
 
 		} else if (this.stateMachine.getStateGame() == 3) {
@@ -305,7 +301,8 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	private void playerPutPieceAt(int x, int y) {
 		for (Node n : this.gameExecutor.getGraph().getNodes()) {
 			int distance = MathAlgorithm.distanceBetween(x, y, n.x, n.y);
-			if (distance < 50) {
+			System.out.println(distance);
+			if (distance < 10) {
 				if (n.getPlayer().getColorEnum()
 						.equals(this.stateMachine.currentPlayer.getColorEnum())) {
 					n.setNumberOfPieces(n.getNumberOfPieces() + 1);
@@ -337,7 +334,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	private void putPiecesContinent(int x, int y) {
 		for (Node n : this.gameExecutor.getGraph().getNodes()) {
 			int distance = MathAlgorithm.distanceBetween(x, y, n.x, n.y);
-			if (distance < 50) {
+			if (distance < 10) {
 				if (n.getPlayer().getColorEnum()
 						.equals(this.stateMachine.currentPlayer.getColorEnum())) {
 					if (this.strategiesAlgorithm
@@ -477,30 +474,30 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			int i = 0;
 			for (Checkbox checkbox : this.grpColorsSelect.list) {
 				checkbox.setBackground(Color.WHITE);
-				checkbox.setBounds(440 + i * 80, 440, 70, 30);
+				checkbox.setBounds((int) ((440 + i * 80)/resize) , (int)((440)/resize), (int)(70/resize), (int)(30/resize));
 				i = i + 1;
 			}
 
 			i = 0;
 			for (Checkbox checkbox : this.grpTotalPlayers.list) {
 				checkbox.setBackground(Color.WHITE);
-				checkbox.setBounds(440 + i * 110, 550, 100, 30);
+				checkbox.setBounds((int)((440 + i * 110)/resize), (int)(550/resize), (int)(100/resize), (int)(30/resize));
 				i = i + 1;
 			}
 
 			i = 0;
 			for (Checkbox checkbox : this.grpVelocityGame.list) {
 				checkbox.setBackground(Color.WHITE);
-				checkbox.setBounds(440 + i * 110, 660, 100, 30);
+				checkbox.setBounds((int)((440 + i * 110)/resize), (int)(660/resize), (int)(100/resize), (int)(30/resize));
 				i = i + 1;
 			}
 
-			this.startButton.setBounds(320, 750, 80, 40);
+			this.startButton.setBounds((int)(320/resize), (int)(750/resize), (int)(80/resize), (int)(40/resize));
 
 		} else {
 			g2d.drawImage(imgBoard, 0, 0, null);
-			g2d.drawImage(imgFooter, 0, 790, null);
-			g2d.drawImage(imgPlayerObjetive, 0, 790, null);
+			g2d.drawImage(imgFooter, 0, (int)(790/resize), null);
+			g2d.drawImage(imgPlayerObjetive, 0, (int)(790/resize), null);
 
 			if (this.stateMachine.getStateGame() == 6) {
 				if (this.stateMachine.currentPlayer.isPlayer()) {
@@ -586,14 +583,14 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 				g2d.setColor(Color.WHITE);
 				for (int n : d.dadosAtaque) {
 					n = n + 1;
-					g2d.drawString(Integer.toString(n), 642 + count * 100, 835);
+					g2d.drawString(Integer.toString(n), (int)((642 + count * 100)/resize), (int)(835/resize));
 					count = count + 1;
 				}
 				count = 0;
 				g2d.setColor(Color.BLACK);
 				for (int n : d.dadosDefense) {
 					n = n + 1;
-					g2d.drawString(Integer.toString(n), 642 + count * 100, 885);
+					g2d.drawString(Integer.toString(n), (int)((642 + count * 100)/resize), (int)(885/resize));
 					count = count + 1;
 				}
 			}
@@ -611,21 +608,21 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		int stateGame = this.stateMachine.getStateGame();
 
 		if (stateGame == 3) {
-			g2d.drawImage(imgEstadoAtacar, 300, 790, null);
+			g2d.drawImage(imgEstadoAtacar, (int)(300/resize), (int)(790/resize), null);
 		} else if (stateGame == 5) {
-			g2d.drawImage(imgEstadoColocarPecas, 300, 790, null);
+			g2d.drawImage(imgEstadoColocarPecas, (int)(300/resize), (int)(790/resize), null);
 		} else if (stateGame == 6) {
-			g2d.drawImage(imgEstadoColocarPecasContinente, 300, 790, null);
+			g2d.drawImage(imgEstadoColocarPecasContinente, (int)(300/resize), (int)(790/resize), null);
 		} else if (stateGame == 7) {
-			g2d.drawImage(imgEstadoRemanejamento, 300, 790, null);
+			g2d.drawImage(imgEstadoRemanejamento, (int)(300/resize), (int)(790/resize), null);
 		} else if (stateGame == 8) {
 			if (this.stateMachine.currentPlayer.isPlayer()) {
-				g2d.drawImage(imgEstadoVitoria, 300, 790, null);
+				g2d.drawImage(imgEstadoVitoria, (int)(300/resize), (int)(790/resize), null);
 			} else {
-				g2d.drawImage(imgEstadoDerrota, 300, 790, null);
+				g2d.drawImage(imgEstadoDerrota, (int)(300/resize), (int)(790/resize), null);
 			}
 		} else {
-			g2d.drawImage(imgEstadoTurnoComputador, 300, 790, null);
+			g2d.drawImage(imgEstadoTurnoComputador, (int)(300/resize), (int)(790/resize), null);
 		}
 
 	}
@@ -731,6 +728,19 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		this.grpVelocityGame.list.add(c12);
 		this.grpVelocityGame.list.add(c13);
 		this.grpVelocityGame.list.add(c14);
+	}
+	
+	
+	public Image getFormatedImage(String path, Double resize){
+		File f = new File(getClass()
+				.getResource(path).getPath());
+		try {
+			BufferedImage img = ImageIO.read(f);
+			return img.getScaledInstance((int)(img.getWidth()/resize) , (int)(img.getHeight() /resize), Image.SCALE_SMOOTH);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Erro no carregamento de imagens");
+		}
 	}
 
 }
