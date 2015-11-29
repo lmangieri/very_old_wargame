@@ -9,8 +9,10 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
+import algorithm.ImageReader;
 import algorithm.MathAlgorithm;
 import basic.GameExecutor;
+import basic.GameInterface;
 import entities.Node;
 import entities.Player;
 import enums.ColorEnum;
@@ -29,68 +31,68 @@ public class ObjetiveInitializer {
 		Image img;
 		
 		
-		img = new ImageIcon(getClass().getResource("/images/objetiveEuropaOceania.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetiveEuropaOceania.png",GameInterface.resize);
 		objetive = new ConquerContinentsObjetive(1,Arrays.asList(gameExecutor.getGraph().getContinentByName(ContinentNames.EUROPA.getName()),
 				gameExecutor.getGraph().getContinentByName(ContinentNames.OCEANIA.getName())),true);
 		objetive.setImageObjetive(img);
 		objetives.add(objetive);
 		
-		img = new ImageIcon(getClass().getResource("/images/objetiveAsiaAmericaDoSul.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetiveAsiaAmericaDoSul.png",GameInterface.resize);
 		objetive = new ConquerContinentsObjetive(2,Arrays.asList(gameExecutor.getGraph().getContinentByName(ContinentNames.ASIA.getName()),
 				gameExecutor.getGraph().getContinentByName(ContinentNames.AMERICA_DO_SUL.getName())),false);
 		objetive.setImageObjetive(img);
 		objetives.add(objetive);
 		
-		img = new ImageIcon(getClass().getResource("/images/objetiveEuropaAmericaDoSul.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetiveEuropaAmericaDoSul.png",GameInterface.resize);
 		objetive = new ConquerContinentsObjetive(3,Arrays.asList(gameExecutor.getGraph().getContinentByName(ContinentNames.EUROPA.getName()),
 				gameExecutor.getGraph().getContinentByName(ContinentNames.AMERICA_DO_SUL.getName())),true);
 		objetive.setImageObjetive(img);
 		objetives.add(objetive);
 		
-		img = new ImageIcon(getClass().getResource("/images/objetiveAsiaAfrica.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetiveAsiaAfrica.png",GameInterface.resize);
 		objetive = new ConquerContinentsObjetive(4,Arrays.asList(gameExecutor.getGraph().getContinentByName(ContinentNames.ASIA.getName()),
 				gameExecutor.getGraph().getContinentByName(ContinentNames.AFRICA.getName())),false);
 		objetive.setImageObjetive(img);
 		objetives.add(objetive);
 		
-		img = new ImageIcon(getClass().getResource("/images/objetiveAmericaDoNorteAfrica.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetiveAmericaDoNorteAfrica.png",GameInterface.resize);
 		objetive = new ConquerContinentsObjetive(5,Arrays.asList(gameExecutor.getGraph().getContinentByName(ContinentNames.AMERICA_DO_NORTE.getName()),
 				gameExecutor.getGraph().getContinentByName(ContinentNames.AFRICA.getName())),false);
 		objetive.setImageObjetive(img);
 		objetives.add(objetive);		
 		
-		img = new ImageIcon(getClass().getResource("/images/objetiveAmericaDoNorteOceania.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetiveAmericaDoNorteOceania.png",GameInterface.resize);
 		objetive = new ConquerContinentsObjetive(6,Arrays.asList(gameExecutor.getGraph().getContinentByName(ContinentNames.AMERICA_DO_NORTE.getName()),
 				gameExecutor.getGraph().getContinentByName(ContinentNames.OCEANIA.getName())),true);
 		objetive.setImageObjetive(img);
 		objetives.add(objetive);	
 
-		img = new ImageIcon(getClass().getResource("/images/objetive24ter.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetive24ter.png",GameInterface.resize);
 		objetive = new ConquerTwentyFourCountriesObjetive(7,gameExecutor);
 		objetive.setImageObjetive(img);
 		objetives.add(objetive);		
 		
-		img = new ImageIcon(getClass().getResource("/images/objetive18ter.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetive18ter.png",GameInterface.resize);
 		objetive = new PutTwoPiecesOnEighteenCountriesObjetive(8, gameExecutor);
 		objetive.setImageObjetive(img);
 		objetives.add(objetive);
 		
-		img = new ImageIcon(getClass().getResource("/images/objetiveDestruirBranco.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetiveDestruirBranco.png",GameInterface.resize);
 		addObjetiveToDestroyAnColor(9,ColorEnum.WHITE.getColor(), img);
 		
-		img = new ImageIcon(getClass().getResource("/images/objetiveDestruirPreto.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetiveDestruirPreto.png",GameInterface.resize);
 		addObjetiveToDestroyAnColor(10,ColorEnum.BLACK.getColor(), img);
 		
-		img = new ImageIcon(getClass().getResource("/images/objetiveDestruirAmarelo.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetiveDestruirAmarelo.png",GameInterface.resize);
 		addObjetiveToDestroyAnColor(11,ColorEnum.YELLOW.getColor(), img);
 		
-		img = new ImageIcon(getClass().getResource("/images/objetiveDestruirVerde.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetiveDestruirVerde.png",GameInterface.resize);
 		addObjetiveToDestroyAnColor(12,ColorEnum.GREEN.getColor(), img);
 		
-		img = new ImageIcon(getClass().getResource("/images/objetiveDestruirAzul.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetiveDestruirAzul.png",GameInterface.resize);
 		addObjetiveToDestroyAnColor(13,ColorEnum.BLUE.getColor(), img);
 		
-		img = new ImageIcon(getClass().getResource("/images/objetiveDestruirVermelho.png")).getImage();
+		img = ImageReader.getFormatedImage("/images/objetiveDestruirVermelho.png",GameInterface.resize);
 		addObjetiveToDestroyAnColor(14,ColorEnum.RED.getColor(), img);		
 	}
 	
@@ -102,7 +104,7 @@ public class ObjetiveInitializer {
 			objetives.add(objetive);
 		} catch (PlayerWithColorNotExist e) {
 			objetive = new ConquerTwentyFourCountriesObjetive(identifier,gameExecutor);
-			img = new ImageIcon(getClass().getResource("/images/objetive24ter.png")).getImage();
+			img = ImageReader.getFormatedImage("/images/objetive24ter.png",GameInterface.resize);
 			objetive.setImageObjetive(img);
 			objetives.add(objetive);
 		}

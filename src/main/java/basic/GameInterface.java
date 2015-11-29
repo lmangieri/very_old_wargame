@@ -8,17 +8,13 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import algorithm.ImageReader;
 import algorithm.MathAlgorithm;
 import algorithm.StrategiesAlgorithm;
 import auxiliaryEntities.AuxPutOrRelocatePiece;
@@ -38,7 +34,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private GameExecutor gameExecutor;
-	public double resize;
+	public static double resize = 1.0;
 
 	private JButton startButton;
 	private CheckboxGroupList grpColorsSelect;
@@ -106,33 +102,33 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		});
 
 
-		this.initialScreen = getFormatedImage("/images/initialScreen.png",resize);
+		this.initialScreen = ImageReader.getFormatedImage("/images/initialScreen.png",resize);
 
-		this.imgBoard = getFormatedImage("/images/paintedCropped.png",resize);
+		this.imgBoard = ImageReader.getFormatedImage("/images/paintedCropped.png",resize);
 		
-		this.imgFooter = getFormatedImage("/images/footer.png",resize);
+		this.imgFooter = ImageReader.getFormatedImage("/images/footer.png",resize);
 
-		this.imgAttacker = getFormatedImage("/images/swordWithLayerCleared.png",resize);
+		this.imgAttacker = ImageReader.getFormatedImage("/images/swordWithLayerCleared.png",resize);
 		
-		this.imgDefender = getFormatedImage("/images/shieldWithLayerCleared.png",resize);
+		this.imgDefender = ImageReader.getFormatedImage("/images/shieldWithLayerCleared.png",resize);
 
-		this.imgBlueCircle = getFormatedImage("/images/circuloazul.png",resize);
+		this.imgBlueCircle = ImageReader.getFormatedImage("/images/circuloazul.png",resize);
 
-		this.imgEstadoAtacar = getFormatedImage("/images/estadoAtacar.png",resize);
+		this.imgEstadoAtacar = ImageReader.getFormatedImage("/images/estadoAtacar.png",resize);
 		
-		this.imgEstadoColocarPecas = getFormatedImage("/images/estadoColocarPecas.png",resize);
+		this.imgEstadoColocarPecas = ImageReader.getFormatedImage("/images/estadoColocarPecas.png",resize);
 		
-		this.imgEstadoColocarPecasContinente = getFormatedImage("/images/estadoColocarPecasContinente.png",resize);
+		this.imgEstadoColocarPecasContinente = ImageReader.getFormatedImage("/images/estadoColocarPecasContinente.png",resize);
 		
 		
-		this.imgEstadoRemanejamento = getFormatedImage("/images/estadoRemanejamento.png",resize);
+		this.imgEstadoRemanejamento = ImageReader.getFormatedImage("/images/estadoRemanejamento.png",resize);
 		
-		this.imgEstadoTurnoComputador = getFormatedImage("/images/estadoTurnoComputador.png",resize);
+		this.imgEstadoTurnoComputador = ImageReader.getFormatedImage("/images/estadoTurnoComputador.png",resize);
 		
-		this.imgEstadoVitoria = getFormatedImage("/images/estadoVitoria.png",resize);
+		this.imgEstadoVitoria = ImageReader.getFormatedImage("/images/estadoVitoria.png",resize);
 		
-		this.imgEstadoDerrota = getFormatedImage("/images/estadoDerrota.png",resize);
-		this.imgDados = getFormatedImage("/images/dados.png",resize);
+		this.imgEstadoDerrota = ImageReader.getFormatedImage("/images/estadoDerrota.png",resize);
+		this.imgDados = ImageReader.getFormatedImage("/images/dados.png",resize);
 
 		this.startButton = new JButton("Jogar");
 		this.add(this.startButton);
@@ -299,10 +295,13 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	}
 
 	private void playerPutPieceAt(int x, int y) {
+		x = x - 12;
+		y = y - 12;		
+		System.out.println("x and y => "+x +" "+y);
 		for (Node n : this.gameExecutor.getGraph().getNodes()) {
 			int distance = MathAlgorithm.distanceBetween(x, y, n.x, n.y);
 			System.out.println(distance);
-			if (distance < 10) {
+			if (distance < 25) {
 				if (n.getPlayer().getColorEnum()
 						.equals(this.stateMachine.currentPlayer.getColorEnum())) {
 					n.setNumberOfPieces(n.getNumberOfPieces() + 1);
@@ -332,9 +331,11 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	// o ato de colocar a peça... estar no GameInterface... é meio estranho....
 	// TODO: o nome deste método está correto?
 	private void putPiecesContinent(int x, int y) {
+		x = x - 12;
+		y = y - 12;		
 		for (Node n : this.gameExecutor.getGraph().getNodes()) {
 			int distance = MathAlgorithm.distanceBetween(x, y, n.x, n.y);
-			if (distance < 10) {
+			if (distance < 25) {
 				if (n.getPlayer().getColorEnum()
 						.equals(this.stateMachine.currentPlayer.getColorEnum())) {
 					if (this.strategiesAlgorithm
@@ -375,11 +376,14 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	}
 
 	private void markNodeAsAttackerOrTarget(int x, int y) {
+		x = x - 12;
+		y = y - 12;		
 		boolean wasASelectClick = false;
-
 		for (Node n : this.gameExecutor.getGraph().getNodes()) {
 			int distance = MathAlgorithm.distanceBetween(x, y, n.x, n.y);
-			if (distance < 50) {
+			System.out.println(distance);
+			if (distance < 25) {
+
 				
 				
 				if (n.getPlayer().getColorEnum()
@@ -419,10 +423,13 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		}
 	}
 
+	// TODO: criar um vetor de distancias... e pegar a menor.
 	public void markNodeToTransfer(int x, int y) {
+		x = x - 12;
+		y = y - 12;
 		for (Node n : this.gameExecutor.getGraph().getNodes()) {
 			int distance = MathAlgorithm.distanceBetween(x, y, n.x, n.y);
-			if (distance < 50) {
+			if (distance < 25) {
 				if (n.getPlayer().getColorEnum()
 						.equals(this.stateMachine.currentPlayer.getColorEnum())) {
 
@@ -576,7 +583,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 								+ " peças", 390, 910);
 			}
 
-			g2d.drawImage(imgDados, 600, 790, null);
+			g2d.drawImage(imgDados, (int)(600/resize), (int)(790/resize), null);
 			DadosJogados d = this.gameExecutor.d;
 			if (d != null) {
 				int count = 0;
@@ -728,19 +735,6 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		this.grpVelocityGame.list.add(c12);
 		this.grpVelocityGame.list.add(c13);
 		this.grpVelocityGame.list.add(c14);
-	}
-	
-	
-	public Image getFormatedImage(String path, Double resize){
-		File f = new File(getClass()
-				.getResource(path).getPath());
-		try {
-			BufferedImage img = ImageIO.read(f);
-			return img.getScaledInstance((int)(img.getWidth()/resize) , (int)(img.getHeight() /resize), Image.SCALE_SMOOTH);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Erro no carregamento de imagens");
-		}
 	}
 
 }
