@@ -339,7 +339,8 @@ public class Graph {
 		Vertice v119 = new Vertice(nChina,nOmsk,1);
 		Vertice v120 = new Vertice(nChina,nMongolia,1);
 		Vertice v121 = new Vertice(nChina,nVladivostok,1);
-		nChina.setVertices(Arrays.asList(v115,v116,v117,v118,v119,v120,v121));
+		Vertice v121_1 = new Vertice(nChina, nTchita,1);
+		nChina.setVertices(Arrays.asList(v115,v116,v117,v118,v119,v120,v121,v121_1));
 
 		Vertice v122 = new Vertice(nJapao,nVladivostok,1);
 		Vertice v123 = new Vertice(nJapao,nChina,1);

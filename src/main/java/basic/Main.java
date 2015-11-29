@@ -23,7 +23,6 @@ public class Main {
 				Double da = (double) ((double)1200 / (double)lar);
 				Double de = (double) ((double)965 / (double)alt);
 
-				System.out.println(da +" "+de);
 				Double resize;
 				if(da < 1.0 && de < 1.0 ) {
 					resize = 1.0;
@@ -33,12 +32,9 @@ public class Main {
 					} else {
 						resize = de;
 					}
-				}
+				}		
 				
-				
-				System.out.println("largura "+lar+ " alt "+alt );				
-				
-				JFrame frame = new JFrame("War Game - v1");
+				JFrame frame = new JFrame("War Game - v2");
 
 				GameInterface gameInterface = new GameInterface(resize);
 				frame.add(gameInterface, BorderLayout.CENTER);

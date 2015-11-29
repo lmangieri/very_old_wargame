@@ -84,7 +84,6 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 
 	public GameInterface(Double resize) {
 		this.resize = resize;
-		System.out.println(resize);
 		Graph graph = Graph.getGraphWithDefaultConfiguration();
 		graph.resizeNodeCoordenates(resize);
 		gameExecutor = new GameExecutor(graph);
@@ -297,10 +296,8 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	private void playerPutPieceAt(int x, int y) {
 		x = x - 12;
 		y = y - 12;		
-		System.out.println("x and y => "+x +" "+y);
 		for (Node n : this.gameExecutor.getGraph().getNodes()) {
 			int distance = MathAlgorithm.distanceBetween(x, y, n.x, n.y);
-			System.out.println(distance);
 			if (distance < 25) {
 				if (n.getPlayer().getColorEnum()
 						.equals(this.stateMachine.currentPlayer.getColorEnum())) {
@@ -381,7 +378,6 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		boolean wasASelectClick = false;
 		for (Node n : this.gameExecutor.getGraph().getNodes()) {
 			int distance = MathAlgorithm.distanceBetween(x, y, n.x, n.y);
-			System.out.println(distance);
 			if (distance < 25) {
 
 				
@@ -499,7 +495,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 				i = i + 1;
 			}
 
-			this.startButton.setBounds((int)(320/resize), (int)(750/resize), (int)(80/resize), (int)(40/resize));
+			this.startButton.setBounds((int)(320), (int)(750/resize), 80, 40);
 
 		} else {
 			g2d.drawImage(imgBoard, 0, 0, null);
@@ -542,7 +538,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 				}
 
 				g2d.drawString(Integer.toString(n.getNumberOfPieces()),
-						n.x + 10, n.y + 15);
+						(n.x + 10), n.y + 15);
 			}
 
 			/* Desenhando círculos dos steps */
@@ -578,9 +574,10 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			}
 
 			if (this.stateMachine.getStateGame() == 5) {
+				g2d.setColor(Color.BLACK);
 				g2d.drawString(
 						Integer.toString(this.stateMachine.numberOfPiecesToPut)
-								+ " peças", 390, 910);
+								+ " peças", (int)(390/resize), (int)(910/resize));
 			}
 
 			g2d.drawImage(imgDados, (int)(600/resize), (int)(790/resize), null);

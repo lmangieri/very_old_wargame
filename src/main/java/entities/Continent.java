@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
+import algorithm.ImageReader;
+import basic.GameInterface;
 import enums.ContinentNames;
 
 public class Continent {
@@ -23,23 +25,20 @@ public class Continent {
 	public Continent(List<Node> countries, String name) {
 		this.countries = countries;
 		this.name = name;
-		ImageIcon ic;
-		
 		
 		if(name.equals(ContinentNames.AFRICA.getName())) {
-			ic= new ImageIcon(getClass().getResource("/images/somenteAfrica.png"));
+			image= ImageReader.getFormatedImage("/images/somenteAfrica.png",GameInterface.resize);
 		} else if (name.equals(ContinentNames.AMERICA_DO_NORTE.getName())) {
-			ic= new ImageIcon(getClass().getResource("/images/somenteAmericaNorte.png"));
+			image = ImageReader.getFormatedImage("/images/somenteAmericaNorte.png",GameInterface.resize);
 		} else if (name.equals(ContinentNames.AMERICA_DO_SUL.getName())) {
-			ic= new ImageIcon(getClass().getResource("/images/somenteAmericaSul.png"));
+			image = ImageReader.getFormatedImage("/images/somenteAmericaSul.png",GameInterface.resize);
 		} else if (name.equals(ContinentNames.ASIA.getName())) {
-			ic= new ImageIcon(getClass().getResource("/images/somenteAsia.png"));
+			image = ImageReader.getFormatedImage("/images/somenteAsia.png",GameInterface.resize);
 		} else if (name.equals(ContinentNames.EUROPA.getName())) {
-			ic= new ImageIcon(getClass().getResource("/images/somenteEuropa.png"));
+			image = ImageReader.getFormatedImage("/images/somenteEuropa.png",GameInterface.resize);
 		} else {
-			ic= new ImageIcon(getClass().getResource("/images/somenteOceania.png"));
+			image = ImageReader.getFormatedImage("/images/somenteOceania.png",GameInterface.resize);
 		}
-		this.image = ic.getImage();
 		
 	}
 	
