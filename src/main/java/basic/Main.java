@@ -18,21 +18,22 @@ public class Main {
 				Dimension tela = Toolkit.getDefaultToolkit().getScreenSize(); 
 				int lar = (int) tela.getWidth(); 
 				int alt = (int) tela.getHeight();
-				
+				alt = alt - 50;
 				
 				Double da = (double) ((double)1200 / (double)lar);
 				Double de = (double) ((double)965 / (double)alt);
 
 				Double resize;
+				/*
 				if(da < 1.0 && de < 1.0 ) {
 					resize = 1.0;
-				} else {
+				} else { */
 					if(da > de) {
 						resize = da;
 					} else {
 						resize = de;
 					}
-				}		
+				// }		
 				
 				JFrame frame = new JFrame("War Game - v2");
 
@@ -46,7 +47,7 @@ public class Main {
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
 				
-				frame.setResizable(true);
+				frame.setResizable(false);
 			}
 		});
 

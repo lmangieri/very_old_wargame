@@ -3,8 +3,6 @@ package entities;
 import java.awt.Image;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-
 import algorithm.ImageReader;
 import basic.GameInterface;
 import enums.ContinentNames;
@@ -27,17 +25,17 @@ public class Continent {
 		this.name = name;
 		
 		if(name.equals(ContinentNames.AFRICA.getName())) {
-			image= ImageReader.getFormatedImage("/images/somenteAfrica.png",GameInterface.resize);
+			image= ImageReader.getFormatedImage("/images/somenteAfrica.png",GameInterface.getResize());
 		} else if (name.equals(ContinentNames.AMERICA_DO_NORTE.getName())) {
-			image = ImageReader.getFormatedImage("/images/somenteAmericaNorte.png",GameInterface.resize);
+			image = ImageReader.getFormatedImage("/images/somenteAmericaNorte.png",GameInterface.getResize());
 		} else if (name.equals(ContinentNames.AMERICA_DO_SUL.getName())) {
-			image = ImageReader.getFormatedImage("/images/somenteAmericaSul.png",GameInterface.resize);
+			image = ImageReader.getFormatedImage("/images/somenteAmericaSul.png",GameInterface.getResize());
 		} else if (name.equals(ContinentNames.ASIA.getName())) {
-			image = ImageReader.getFormatedImage("/images/somenteAsia.png",GameInterface.resize);
+			image = ImageReader.getFormatedImage("/images/somenteAsia.png",GameInterface.getResize());
 		} else if (name.equals(ContinentNames.EUROPA.getName())) {
-			image = ImageReader.getFormatedImage("/images/somenteEuropa.png",GameInterface.resize);
+			image = ImageReader.getFormatedImage("/images/somenteEuropa.png",GameInterface.getResize());
 		} else {
-			image = ImageReader.getFormatedImage("/images/somenteOceania.png",GameInterface.resize);
+			image = ImageReader.getFormatedImage("/images/somenteOceania.png",GameInterface.getResize());
 		}
 		
 	}

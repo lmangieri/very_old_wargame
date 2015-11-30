@@ -1,4 +1,4 @@
-package utils;
+package auxiliaryEntities;
 
 import java.awt.Checkbox;
 import java.awt.CheckboxGroup;

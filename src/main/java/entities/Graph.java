@@ -1,12 +1,9 @@
 package entities;
 
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
-import javax.swing.ImageIcon;
 
 import algorithm.GraphAlgorithm;
 import algorithm.StrategiesAlgorithm;

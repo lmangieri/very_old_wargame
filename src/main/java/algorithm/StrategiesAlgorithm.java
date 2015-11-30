@@ -65,8 +65,6 @@ public class StrategiesAlgorithm {
 	public Node decideNextPieceToPut(Player p, Continent c) {
 		ColorEnum playerColor = p.getColorEnum();
 		
-
-
 		List<AuxPutOrRelocatePiece> auxPutPiecesList = new ArrayList<>();
 		for (Node n : p.getNodes()) {
 			if(c != null) {

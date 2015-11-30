@@ -60,10 +60,6 @@ public class StateMachine implements Runnable {
 
 	// TODO : urgente... separar em dois estados...
 	public void stage2() {
-
-		// System.out.println("Index => " + this.currentIndex +
-		// " total players => " + this.gameExecutor.getTotalPlayers());
-
 		if (this.gameExecutor.getTotalPlayers() == this.currentIndex) {
 			this.isFirstRound = false;
 		}
@@ -131,13 +127,6 @@ public class StateMachine implements Runnable {
 			while (n.canAttack()) {
 				Node target = strategiesAlgorithm.decideNextTarget(n);
 				if (target != null) {
-
-					if (target.getPlayer().getColorEnum()
-							.equals(p.getColorEnum())) {
-						throw new RuntimeException(
-								"COLOR TRYING TO ATTACK THE SAME COLOR !!! ");
-					}
-
 					changeStateOfNodeAttackerAndNodeTarget(n, target);
 					try {
 						Thread.sleep(velocityChoosed);
@@ -176,44 +165,6 @@ public class StateMachine implements Runnable {
 		this.nodeTarget = nt;
 	}
 
-	// Estágio de ataque do computador...
-	// public void stage4(Player p) {
-	//
-	// while(p.canAttack()) {
-	// for (Node n : p.getNodes()) {
-	// Node target = strategiesAlgorithm.decideNextTarget(n);
-	//
-	// if (target != null) {
-	//
-	// if (target.getPlayer().getColorEnum().equals(p.getColorEnum())) {
-	// throw new RuntimeException(
-	// "COLOR TRYING TO ATTACK THE SAME COLOR !!! ");
-	// }
-	//
-	// this.nodeAttacker = n;
-	// this.nodeTarget = target;
-	//
-	// try {
-	// Thread.sleep(velocityChoosed);
-	// } catch (InterruptedException e) {
-	// }
-	// this.gameExecutor.attack(this.nodeAttacker, this.nodeTarget); // ?????
-	// this.nodeAttacker = null;
-	// this.nodeTarget = null;
-	// break;
-	// }
-	// }
-	// }
-	//
-	// if(!theGameHasEnded()) {
-	// this.setStateGame(7);
-	// this.stage7();
-	// } else {
-	// this.setStateGame(8);
-	// this.stage8();
-	// }
-	// }
-	//
 
 	// estágio de transferência do computador....
 	public synchronized void stage7() {
@@ -248,25 +199,12 @@ public class StateMachine implements Runnable {
 			}
 		}
 
-		// Eu poderia criar uma função de relocate em outro lugar para fazer
-		// isso para o computador....
-
-		// when should I realocate?
-		// if you are locked....
-		// pega a lista de targets.... olha 1 por 1... até encontrar um que não
-		// lhe pertença....
-		// pego aquela lista de distancia do grafo que está pronta.... realoco
-		// para o país de índice 1...
-		// faço isso.... até que todos os países lockeds sejam realocados...
-		// ou.... eu paro caso não tiver mais targets.
-
 		nextTurn();
 
 	}
 
 	public void nextTurn() {
 		this.currentIndex = this.currentIndex + 1;
-		// this.stage2();
 		state2Thread = new Thread(this);
 		state2Thread.start();
 	}
@@ -282,7 +220,7 @@ public class StateMachine implements Runnable {
 				+ currentPlayer.getColorEnum().getName());
 	}
 
-	// I think... that this should be on gameExecutor
+
 	public boolean theGameHasEnded() {
 		if (this.currentPlayer.getObjetive().getClass()
 				.equals(ConquerTwentyFourCountriesObjetive.class)) {

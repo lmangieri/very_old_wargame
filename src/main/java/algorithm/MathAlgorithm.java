@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import auxiliaryEntities.DadosJogados;
+import entities.DadosJogados;
 
 public class MathAlgorithm {
 	public static int getRandomInt(int maxValue) {

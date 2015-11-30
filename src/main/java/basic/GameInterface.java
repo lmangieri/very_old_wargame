@@ -18,14 +18,15 @@ import algorithm.ImageReader;
 import algorithm.MathAlgorithm;
 import algorithm.StrategiesAlgorithm;
 import auxiliaryEntities.AuxPutOrRelocatePiece;
-import auxiliaryEntities.DadosJogados;
+import auxiliaryEntities.CheckboxGroupList;
+import auxiliaryEntities.MP3Player;
 import auxiliaryEntities.StructureAuxToPutPiecesOnContinent;
+import entities.DadosJogados;
 import entities.Graph;
 import entities.Node;
 import entities.Player;
 import entities.Vertice;
 import enums.ColorEnum;
-import utils.CheckboxGroupList;
 
 public class GameInterface extends JPanel implements ActionListener, Runnable {
 
@@ -34,25 +35,23 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private GameExecutor gameExecutor;
-	public static double resize = 1.0;
+	private StateMachine stateMachine;
+	public StrategiesAlgorithm strategiesAlgorithm;
+	private static double resize = 1.0;
+	private Thread game;
+	private Timer time;	
+	
 
+	/* Variáveis - initial screen */
 	private JButton startButton;
 	private CheckboxGroupList grpColorsSelect;
 	private CheckboxGroupList grpTotalPlayers;
 	private CheckboxGroupList grpVelocityGame;
-
 	private String colorChoosed;
 	private int numberOfPlayersChoosed;
 
-	private Thread game;
-	private Timer time;
 
-	private StateMachine stateMachine;
-
-	// SHOULD IT BE HERE?
-	public StrategiesAlgorithm strategiesAlgorithm;
-
-	/* Inicio: Conjunto de imagens utilizadas para a interface gráfica */
+	/* Conjunto de imagens utilizadas para a interface gráfica */
 	public Image initialScreen;
 	public Image imgBoard;
 	public Image imgFooter;
@@ -60,7 +59,6 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	public Image imgDefender;
 	public Image imgBlueCircle;
 	public Image imgPlayerObjetive;
-
 	public Image imgEstadoAtacar;
 	public Image imgEstadoColocarPecas;
 	public Image imgEstadoColocarPecasContinente;
@@ -68,9 +66,9 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	public Image imgEstadoTurnoComputador;
 	public Image imgEstadoVitoria;
 	public Image imgEstadoDerrota;
-
 	public Image imgDados;
-
+	
+	/* Sounds */
 	public static MP3Player victoryMusic = new MP3Player(
 			"/musics/victorymusic.mp3");
 	public static MP3Player failMusic = new MP3Player("/musics/failmusic.mp3");
@@ -82,15 +80,15 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	public static MP3Player teleportMusic = new MP3Player(
 			"/musics/teleport.mp3");
 
+	
 	public GameInterface(Double resize) {
-		this.resize = resize;
+		GameInterface.setResize(resize);
 		Graph graph = Graph.getGraphWithDefaultConfiguration();
 		graph.resizeNodeCoordenates(resize);
 		gameExecutor = new GameExecutor(graph);
 		this.stateMachine = new StateMachine(gameExecutor);
 		this.setLayout(null);
 
-		// sei lá se isso deveria estar aqui.... ZZZ
 		this.strategiesAlgorithm = new StrategiesAlgorithm(
 				this.gameExecutor.getGraph());
 
@@ -100,48 +98,41 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			}
 		});
 
+		initGameImages();
 
-		this.initialScreen = ImageReader.getFormatedImage("/images/initialScreen.png",resize);
-
-		this.imgBoard = ImageReader.getFormatedImage("/images/paintedCropped.png",resize);
-		
-		this.imgFooter = ImageReader.getFormatedImage("/images/footer.png",resize);
-
-		this.imgAttacker = ImageReader.getFormatedImage("/images/swordWithLayerCleared.png",resize);
-		
-		this.imgDefender = ImageReader.getFormatedImage("/images/shieldWithLayerCleared.png",resize);
-
-		this.imgBlueCircle = ImageReader.getFormatedImage("/images/circuloazul.png",resize);
-
-		this.imgEstadoAtacar = ImageReader.getFormatedImage("/images/estadoAtacar.png",resize);
-		
-		this.imgEstadoColocarPecas = ImageReader.getFormatedImage("/images/estadoColocarPecas.png",resize);
-		
-		this.imgEstadoColocarPecasContinente = ImageReader.getFormatedImage("/images/estadoColocarPecasContinente.png",resize);
-		
-		
-		this.imgEstadoRemanejamento = ImageReader.getFormatedImage("/images/estadoRemanejamento.png",resize);
-		
-		this.imgEstadoTurnoComputador = ImageReader.getFormatedImage("/images/estadoTurnoComputador.png",resize);
-		
-		this.imgEstadoVitoria = ImageReader.getFormatedImage("/images/estadoVitoria.png",resize);
-		
-		this.imgEstadoDerrota = ImageReader.getFormatedImage("/images/estadoDerrota.png",resize);
-		this.imgDados = ImageReader.getFormatedImage("/images/dados.png",resize);
-
+		initStartScreenAttributes();
+	
+		this.stateMachine.setStateGame(0);
+	}
+	
+	public void initStartScreenAttributes() {
 		this.startButton = new JButton("Jogar");
 		this.add(this.startButton);
-
 		this.startButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				startButtonPerformed(evt);
 			}
 		});
-
 		initButtons();
-
-		this.stateMachine.setStateGame(0);
 	}
+	
+	public void initGameImages() {
+		this.initialScreen = ImageReader.getFormatedImage("/images/initialScreen.png",resize);
+		this.imgBoard = ImageReader.getFormatedImage("/images/paintedCropped.png",resize);
+		this.imgFooter = ImageReader.getFormatedImage("/images/footer.png",resize);
+		this.imgAttacker = ImageReader.getFormatedImage("/images/swordWithLayerCleared.png",resize);
+		this.imgDefender = ImageReader.getFormatedImage("/images/shieldWithLayerCleared.png",resize);
+		this.imgBlueCircle = ImageReader.getFormatedImage("/images/circuloazul.png",resize);
+		this.imgEstadoAtacar = ImageReader.getFormatedImage("/images/estadoAtacar.png",resize);
+		this.imgEstadoColocarPecas = ImageReader.getFormatedImage("/images/estadoColocarPecas.png",resize);
+		this.imgEstadoColocarPecasContinente = ImageReader.getFormatedImage("/images/estadoColocarPecasContinente.png",resize);
+		this.imgEstadoRemanejamento = ImageReader.getFormatedImage("/images/estadoRemanejamento.png",resize);
+		this.imgEstadoTurnoComputador = ImageReader.getFormatedImage("/images/estadoTurnoComputador.png",resize);
+		this.imgEstadoVitoria = ImageReader.getFormatedImage("/images/estadoVitoria.png",resize);
+		this.imgEstadoDerrota = ImageReader.getFormatedImage("/images/estadoDerrota.png",resize);
+		this.imgDados = ImageReader.getFormatedImage("/images/dados.png",resize);
+	}
+	
 
 	protected void startButtonPerformed(ActionEvent evt) {
 		this.numberOfPlayersChoosed = Integer.valueOf(this.grpTotalPlayers
@@ -180,9 +171,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		this.imgPlayerObjetive = this.gameExecutor
 				.getImageObjetiveFromHumanPlayer();
 
-		// initAnimation();
-		// initGame();
-		time = new Timer(300, this);
+		time = new Timer(5, this);
 		time.start();
 
 		this.game = new Thread(this);
@@ -221,7 +210,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 	private void MouseClicked(java.awt.event.MouseEvent evt) {
 		int x = evt.getPoint().x;
 		int y = evt.getPoint().y;
-		if (x > (int)(900/resize) && y > (int)(795/resize)) {
+		if (x > (int)(900/getResize()) && y > (int)(795/getResize())) {
 			jumpStepButtonClicked(evt);
 
 		} else if (this.stateMachine.getStateGame() == 3) {
@@ -477,30 +466,30 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			int i = 0;
 			for (Checkbox checkbox : this.grpColorsSelect.list) {
 				checkbox.setBackground(Color.WHITE);
-				checkbox.setBounds((int) ((440 + i * 80)/resize) , (int)((440)/resize), (int)(70/resize), (int)(30/resize));
+				checkbox.setBounds((int) ((440 + i * 80)/getResize()) , (int)((440)/getResize()), (int)(70/getResize()), (int)(30/getResize()));
 				i = i + 1;
 			}
 
 			i = 0;
 			for (Checkbox checkbox : this.grpTotalPlayers.list) {
 				checkbox.setBackground(Color.WHITE);
-				checkbox.setBounds((int)((440 + i * 110)/resize), (int)(550/resize), (int)(100/resize), (int)(30/resize));
+				checkbox.setBounds((int)((440 + i * 110)/getResize()), (int)(550/getResize()), (int)(100/getResize()), (int)(30/getResize()));
 				i = i + 1;
 			}
 
 			i = 0;
 			for (Checkbox checkbox : this.grpVelocityGame.list) {
 				checkbox.setBackground(Color.WHITE);
-				checkbox.setBounds((int)((440 + i * 110)/resize), (int)(660/resize), (int)(100/resize), (int)(30/resize));
+				checkbox.setBounds((int)((440 + i * 110)/getResize()), (int)(660/getResize()), (int)(100/getResize()), (int)(30/getResize()));
 				i = i + 1;
 			}
 
-			this.startButton.setBounds((int)(320), (int)(750/resize), 80, 40);
+			this.startButton.setBounds((int)(320), (int)(750/getResize()), 80, 40);
 
 		} else {
 			g2d.drawImage(imgBoard, 0, 0, null);
-			g2d.drawImage(imgFooter, 0, (int)(790/resize), null);
-			g2d.drawImage(imgPlayerObjetive, 0, (int)(790/resize), null);
+			g2d.drawImage(imgFooter, 0, (int)(790/getResize()), null);
+			g2d.drawImage(imgPlayerObjetive, 0, (int)(790/getResize()), null);
 
 			if (this.stateMachine.getStateGame() == 6) {
 				if (this.stateMachine.currentPlayer.isPlayer()) {
@@ -577,24 +566,24 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 				g2d.setColor(Color.BLACK);
 				g2d.drawString(
 						Integer.toString(this.stateMachine.numberOfPiecesToPut)
-								+ " peças", (int)(390/resize), (int)(910/resize));
+								+ " peças", (int)(390/getResize()), (int)(910/getResize()));
 			}
 
-			g2d.drawImage(imgDados, (int)(600/resize), (int)(790/resize), null);
+			g2d.drawImage(imgDados, (int)(600/getResize()), (int)(790/getResize()), null);
 			DadosJogados d = this.gameExecutor.d;
 			if (d != null) {
 				int count = 0;
 				g2d.setColor(Color.WHITE);
 				for (int n : d.dadosAtaque) {
 					n = n + 1;
-					g2d.drawString(Integer.toString(n), (int)((642 + count * 100)/resize), (int)(835/resize));
+					g2d.drawString(Integer.toString(n), (int)((642 + count * 100)/getResize()), (int)(835/getResize()));
 					count = count + 1;
 				}
 				count = 0;
 				g2d.setColor(Color.BLACK);
 				for (int n : d.dadosDefense) {
 					n = n + 1;
-					g2d.drawString(Integer.toString(n), (int)((642 + count * 100)/resize), (int)(885/resize));
+					g2d.drawString(Integer.toString(n), (int)((642 + count * 100)/getResize()), (int)(885/getResize()));
 					count = count + 1;
 				}
 			}
@@ -612,21 +601,21 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		int stateGame = this.stateMachine.getStateGame();
 
 		if (stateGame == 3) {
-			g2d.drawImage(imgEstadoAtacar, (int)(300/resize), (int)(790/resize), null);
+			g2d.drawImage(imgEstadoAtacar, (int)(300/getResize()), (int)(790/getResize()), null);
 		} else if (stateGame == 5) {
-			g2d.drawImage(imgEstadoColocarPecas, (int)(300/resize), (int)(790/resize), null);
+			g2d.drawImage(imgEstadoColocarPecas, (int)(300/getResize()), (int)(790/getResize()), null);
 		} else if (stateGame == 6) {
-			g2d.drawImage(imgEstadoColocarPecasContinente, (int)(300/resize), (int)(790/resize), null);
+			g2d.drawImage(imgEstadoColocarPecasContinente, (int)(300/getResize()), (int)(790/getResize()), null);
 		} else if (stateGame == 7) {
-			g2d.drawImage(imgEstadoRemanejamento, (int)(300/resize), (int)(790/resize), null);
+			g2d.drawImage(imgEstadoRemanejamento, (int)(300/getResize()), (int)(790/getResize()), null);
 		} else if (stateGame == 8) {
 			if (this.stateMachine.currentPlayer.isPlayer()) {
-				g2d.drawImage(imgEstadoVitoria, (int)(300/resize), (int)(790/resize), null);
+				g2d.drawImage(imgEstadoVitoria, (int)(300/getResize()), (int)(790/getResize()), null);
 			} else {
-				g2d.drawImage(imgEstadoDerrota, (int)(300/resize), (int)(790/resize), null);
+				g2d.drawImage(imgEstadoDerrota, (int)(300/getResize()), (int)(790/getResize()), null);
 			}
 		} else {
-			g2d.drawImage(imgEstadoTurnoComputador, (int)(300/resize), (int)(790/resize), null);
+			g2d.drawImage(imgEstadoTurnoComputador, (int)(300/getResize()), (int)(790/getResize()), null);
 		}
 
 	}
@@ -732,6 +721,14 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		this.grpVelocityGame.list.add(c12);
 		this.grpVelocityGame.list.add(c13);
 		this.grpVelocityGame.list.add(c14);
+	}
+
+	public static double getResize() {
+		return resize;
+	}
+
+	public static void setResize(double resize) {
+		GameInterface.resize = resize;
 	}
 
 }

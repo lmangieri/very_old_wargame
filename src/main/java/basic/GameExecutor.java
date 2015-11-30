@@ -11,13 +11,12 @@ import objetives.DestroyAnColorObjetive;
 import objetives.ObjetiveInitializer;
 import algorithm.MathAlgorithm;
 import algorithm.StrategiesAlgorithm;
-import auxiliaryEntities.DadosJogados;
 import entities.Continent;
+import entities.DadosJogados;
 import entities.Graph;
 import entities.Node;
 import entities.Player;
 import enums.ColorEnum;
-import enums.ContinentNames;
 import exceptions.PlayerWithColorNotExist;
 
 public class GameExecutor {
@@ -56,7 +55,6 @@ public class GameExecutor {
 		availableColors.add(ColorEnum.GREEN);
 		availableColors.add(ColorEnum.YELLOW);
 		
-		// players.add(new Player(availableColors.get(0), true));
 		players.add(new Player(availableColors.get(0), false));
 		players.add(new Player(availableColors.get(1), false));
 		players.add(new Player(availableColors.get(2), false));
