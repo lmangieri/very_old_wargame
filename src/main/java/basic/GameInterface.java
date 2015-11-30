@@ -183,7 +183,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		this.stateMachine.initGameStateOne();
 	}
 
-	// OK
+
 	private void jumpStepButtonClicked(java.awt.event.MouseEvent evt) {
 		int state = this.stateMachine.getStateGame();
 		if (state == 3 || state == 5 || state == 6 || state == 7) {
@@ -531,7 +531,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 			}
 
 			/* Desenhando círculos dos steps */
-			drawStepCircles(g2d);
+			drawCurrentState(g2d);
 
 			if (this.stateMachine.getStateGame() == 3
 					|| this.stateMachine.getStateGame() == 4) {
@@ -594,9 +594,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		setOpaque(false);
 	}
 
-	public void drawStepCircles(Graphics g) {
-		// será pintado com a Color.MAGENTA apenas o current state do
-		// current player.
+	public void drawCurrentState(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		int stateGame = this.stateMachine.getStateGame();
 
