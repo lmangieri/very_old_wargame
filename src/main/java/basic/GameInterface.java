@@ -105,7 +105,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		this.stateMachine.setStateGame(0);
 	}
 	
-	public void initStartScreenAttributes() {
+	private void initStartScreenAttributes() {
 		this.startButton = new JButton("Jogar");
 		this.add(this.startButton);
 		this.startButton.addActionListener(new java.awt.event.ActionListener() {
@@ -116,7 +116,7 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		initButtons();
 	}
 	
-	public void initGameImages() {
+	private void initGameImages() {
 		this.initialScreen = ImageReader.getFormatedImage("/images/initialScreen.png",resize);
 		this.imgBoard = ImageReader.getFormatedImage("/images/paintedCropped.png",resize);
 		this.imgFooter = ImageReader.getFormatedImage("/images/footer.png",resize);
@@ -141,20 +141,8 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 		this.colorChoosed = this.grpColorsSelect.getSelectedCheckbox()
 				.getLabel();
 
-		String v = this.grpVelocityGame.getSelectedCheckbox().getLabel();
-		if (v.equals("Lento")) {
-			this.stateMachine.velocityChoosed = 1200;
-			this.gameExecutor.velocityChoosed = 1200;
-		} else if (v.equals("Normal")) {
-			this.stateMachine.velocityChoosed = 500;
-			this.gameExecutor.velocityChoosed = 500;
-		} else if (v.equals("Rápido")) {
-			this.stateMachine.velocityChoosed = 100;
-			this.gameExecutor.velocityChoosed = 100;
-		} else {
-			this.stateMachine.velocityChoosed = 0;
-			this.gameExecutor.velocityChoosed = 0;
-		}
+		initializeGameVelocity();
+		
 		this.startButton.setVisible(false);
 		for (Checkbox checkbox : this.grpColorsSelect.list) {
 			checkbox.setVisible(false);
@@ -179,6 +167,24 @@ public class GameInterface extends JPanel implements ActionListener, Runnable {
 
 	}
 
+	private void initializeGameVelocity() {
+		String v = this.grpVelocityGame.getSelectedCheckbox().getLabel();
+		if (v.equals("Lento")) {
+			this.stateMachine.velocityChoosed = 1200;
+			this.gameExecutor.velocityChoosed = 1200;
+		} else if (v.equals("Normal")) {
+			this.stateMachine.velocityChoosed = 500;
+			this.gameExecutor.velocityChoosed = 500;
+		} else if (v.equals("Rápido")) {
+			this.stateMachine.velocityChoosed = 100;
+			this.gameExecutor.velocityChoosed = 100;
+		} else {
+			this.stateMachine.velocityChoosed = 0;
+			this.gameExecutor.velocityChoosed = 0;
+		}
+	}
+
+	// TODO: remover este método ?
 	public void initGame() {
 		this.stateMachine.initGameStateOne();
 	}

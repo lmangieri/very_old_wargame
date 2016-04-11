@@ -15,6 +15,7 @@ public class Main {
 
 			@Override
 			public void run() {
+				// TODO:  a dimensão ideal é pensando no padrão da folha sufite / tablet....
 				Dimension tela = Toolkit.getDefaultToolkit().getScreenSize(); 
 				int lar = (int) tela.getWidth(); 
 				int alt = (int) tela.getHeight();
