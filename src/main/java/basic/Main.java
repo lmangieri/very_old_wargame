@@ -17,12 +17,12 @@ public class Main {
 			public void run() {
 				// TODO:  a dimensão ideal é pensando no padrão da folha sufite / tablet....
 				Dimension tela = Toolkit.getDefaultToolkit().getScreenSize(); 
-				int lar = (int) tela.getWidth(); 
-				int alt = (int) tela.getHeight();
-				alt = alt - 50;
+				double lar = (double) tela.getWidth()*0.8; 
+				double alt = (double) tela.getHeight()*0.8; 
+
 				
 				Double da = (double) ((double)1200 / (double)lar);
-				Double de = (double) ((double)965 / (double)alt);
+				Double de = (double) ((double)950 / (double)alt);
 
 				Double resize;
 				/*
@@ -41,10 +41,10 @@ public class Main {
 				GameInterface gameInterface = new GameInterface(resize);
 				frame.add(gameInterface, BorderLayout.CENTER);
 
-				int height = (int) (1200 / resize);
+				int height = (int) (950 / resize);
 				int width = (int) (1200/ resize);
 				
-				frame.setSize(height, width);
+				frame.setSize(width, height);
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
 				
